@@ -10,13 +10,19 @@ function HomePage() {
                 <section>
                     <h1>Welcome to our Website</h1>
                     <p>
-                        Welcome to Brooks' Studio, where precision and creativity meet. We are excited to announce the launch of our brand new website,
-                        featuring a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings. Soon, you will be
-                        able to purchase prints and ceramics directly from our online shop. In the meantime, please use our contact form to inquire about
-                        commissioned work. We would love to collaborate with you to create something beautiful and unique.<br/><br/>
+                        Welcome to Brooks' Studio, where the worlds of precision and creativity converge. We are thrilled to announce the launch of our brand new website,
+                        showcasing a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings.<br/><br/>
 
-                        Follow us on Instagram and Facebook to stay up-to-date with our latest projects and inspiration. Thank you for visiting our site,
-                        and we look forward to connecting with you soon!
+                        At Brooks' Studio, we believe in the beauty of the unseen. Macro, from the Greek word "makros" meaning "large" or "long," allows us to explore
+                        the world in a way that is often overlooked. Through our macro photography, we capture the intricate details of everyday objects, revealing a
+                        world of texture, color, and complexity that is often hidden from view.<br/><br/>
+
+                        In addition to our photography, we offer handmade ceramics and photorealistic digital paintings, all crafted with the same level of precision
+                        and attention to detail. While our online shop is coming soon, we welcome you to use our contact form to inquire about commissioned work.
+                        We are passionate about collaborating with our clients to create unique and personalized pieces.<br/><br/>
+
+                        Don't forget to visit our gallery page to stay up-to-date with our latest projects and inspiration. You can also follow us on Instagram and
+                        Facebook for even more behind-the-scenes glimpses into our process. Thank you for visiting Brooks' Studio, and we can't wait to hear from you.
                     </p>
                 </section>
             </main>
