@@ -14,13 +14,14 @@ export const ContactUs: React.FC = () => {
           setIsSubmitted(true);
       }, (error: EmailJSResponseStatus) => {
           console.log(error.text);
+          alert("Could not submit the form! Please try again later")
       });
   };
 
   return (
     <>
         {isSubmitted ? (
-            <p className='submitted'>Thank you for your message!</p>
+            <p className='submitted'>Thank you for your message! A confirmation email has been delivered to your inbox.</p>
         ) : (
             <form id="ContactForm" ref={form} onSubmit={sendEmail}>
                 <label>Name:</label>

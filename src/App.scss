@@ -29,7 +29,7 @@ form {
         padding: 8px 16px;
         margin-bottom: 10px;
         border-radius: 6px;
-        border: 1px solid black;
+        border: 1px solid #aaa;
         width: 300px;
     }
 
@@ -54,7 +54,7 @@ form {
 
     hr {
         border: none;
-        border-top: 1px solid #333;
+        border-top: 1px solid #aaa;
     }
 
     header {
@@ -64,31 +64,41 @@ form {
             font-family: 'Cinzel Decorative', cursive;
             font-size: 4em;
             margin-bottom: -30px;
+
+            background: rgb(2,0,36);
+            background: linear-gradient(0deg, rgba(148,148,148,1) 0%, rgba(0,0,0,1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         h2 {
             font-family: 'Cinzel Decorative', cursive;
             font-size: 1.5em;
+            background: rgb(129,181,143);
+            background: radial-gradient(circle, rgba(129,181,143,1) 0%, rgba(79,160,217,1) 60%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
         }
 
         ul {
             text-align: left;
             list-style: none;
             margin: 0 auto;
-            width: 400px;
+            width: 480px;
 
             li {
                 display: inline-block;
-                padding-right: 10px;
-                margin-right: 10px;
-                border-right: 1px solid #333;
+                padding-right: 20px;
+                margin-right: 20px;
+                border-right: 1px dotted #333;
 
                 &:last-of-type {
                     border-right: none;
                 }
 
                 a {
-                    color: #1855b1;
+                    color: #b76158;
                     text-decoration: none;
                     font-weight: bold;
 
