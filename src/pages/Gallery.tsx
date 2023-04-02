@@ -18,7 +18,7 @@ function GalleryPage() {
 
     const data = require.context('images/', false, /\.(jpg|png|jpeg)$/);
     const images: CustomImage[] = data.keys().slice(data.keys().length/2).reverse().map(function(x) {
-        return {src: data(x), original: data(x), width: 600, height: 400}
+        return {src: data(x), original: data(x), width: (x.indexOf("_.jpg")>0 ? 400 : 600), height: (x.indexOf("_.jpg")>0 ? 600 : 400)}
     });
 
     const slides = images.map(({ original, width, height }) => ({
