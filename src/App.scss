@@ -1,4 +1,8 @@
 .Contact {
+    section.info {
+        display: inline-block;
+        max-width: 450px;
+    }
     p.submitted {
         padding: 50px 0px;
         text-align: center;
@@ -14,8 +18,10 @@
 
 form {
     &#ContactForm {
-        width: 500px;
-        margin: 0 auto;
+        display: inline-block;
+        vertical-align: top;
+        width: 330px;
+        margin-left: 50px;
     }
 
     padding: 40px;
@@ -24,7 +30,6 @@ form {
         display: inline-block;
         margin-top: 6px;
         margin-right: 10px;
-        text-align: right;
         width: 150px;
         vertical-align: top;
     }
@@ -62,6 +67,7 @@ form {
 
     header {
         text-align: center;
+        margin-bottom: 50px;
 
         h1 {
             font-family: 'Cinzel Decorative', cursive;
@@ -116,6 +122,7 @@ form {
     }
 
     footer {
+        margin-top: 50px;
         text-align: center;
     }
 }

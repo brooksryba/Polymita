@@ -7,14 +7,18 @@ function AboutPage() {
         <div className="About">
             <Header />
             <section>
-                <h3>Biography</h3>
-                <p>Brooks was born in and currently resides in south-east Michigan. He is a self-taught Software Engineer with a background in graphics design,
-                    which lead to a passion for fine arts. His past experience and ability to learn new technology ensures reliable, timely delivery of projects.
-                    In his ceramics, digital paintings, and macro photography he combines his love for technical precision with the fluidity of art. Brooks has
-                    studied ceramics online and under Kay Yourist of the Yourist Pottery Studio in Ann Arbor, MI. With a proficient skill range and a desire to
-                    learn, he has created an at home studio to develop his craft and sell work to the public.<br/>
+                <h3>Biography:</h3>
+                <p>
+                    Brooks, who currently resides in south-east Michigan, was inspired to pursue art from a young age thanks to the encouragement and support
+                    of his parents. Though he is a self-taught Software Engineer with a background in graphics design, his passion for fine arts has led him to
+                    explore ceramics, digital paintings, and macro photography. With his ability to quickly learn and adapt to new technology, Brooks is able to
+                    reliably deliver projects on time.<br/><br/>
+
+                    In his creative work, Brooks seamlessly combines technical precision with the fluidity of art. He has studied ceramics both online and under
+                    the guidance of Kay Yourist of the Yourist Pottery Studio in Ann Arbor, MI. His proficient skill range and desire to continue learning have
+                    led him to create an at-home studio, where he is able to hone his craft and offer his work for sale to the public.
                 </p>
-                <h3>Artist Statement</h3>
+                <h3>Artist Statement:</h3>
                 <p>
                     As an artist, Brooks is driven by a passion for precision and technical design, which is evident in their diverse body of work. From macro
                     photography to handmade ceramic mugs to photorealistic digital paintings, they strive to create pieces that are not only visually striking
@@ -31,7 +35,7 @@ function AboutPage() {
                     stunning and technically impressive. They are constantly striving to push the boundaries of their craft and explore new ways to express
                     themselves through their art.
                 </p>
-                <h3>Process</h3>
+                <h3>Process:</h3>
                 <p>
                     As a ceramic artist working from their home studio, Brooks' process is deeply rooted in the tactile nature of working with clay. Using their
                     Skutt-818 kiln and spare bedroom turned pottery studio, they are able to fully immerse themselves in the creative process. Each piece they create
