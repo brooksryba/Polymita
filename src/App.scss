@@ -1,3 +1,52 @@
+body {
+
+}
+
+.Contact {
+    p.submitted {
+        padding: 50px 0px;
+        text-align: center;
+    }
+}
+
+form {
+    &#ContactForm {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+    padding: 40px;
+
+    label {
+        display: inline-block;
+        margin-top: 6px;
+        margin-right: 10px;
+        text-align: right;
+        width: 150px;
+        vertical-align: top;
+    }
+    input[type=text], input[type=email], textarea {
+        padding: 8px 16px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        border: 1px solid black;
+        width: 300px;
+    }
+
+    textarea {
+        height: 300px;
+    }
+
+    div.submit {
+        text-align: right;
+    }
+
+    input[type=submit] {
+        width: 120px;
+        height: 35px;
+    }
+}
+
 #root {
     font-family: 'Marcellus', serif;
     max-width: 1000px;
@@ -26,7 +75,7 @@
             text-align: left;
             list-style: none;
             margin: 0 auto;
-            width: 500px;
+            width: 400px;
 
             li {
                 display: inline-block;
@@ -49,5 +98,9 @@
                 }
             }
         }
+    }
+
+    footer {
+        text-align: center;
     }
 }
