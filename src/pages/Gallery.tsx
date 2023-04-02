@@ -1,46 +1,21 @@
-import { useState } from 'react';
-import { Gallery, Image } from "react-grid-gallery";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
-
+import Painting from '../components/Painting';
+import Photography from 'components/Photography';
+import Pottery from 'components/Pottery';
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import 'App.scss';
 
 
-export interface CustomImage extends Image {
-  original: string;
-}
-
 function GalleryPage() {
-    const [index, setIndex] = useState(-1);
-    const handleClick = (index: number) => setIndex(index);
-
-    const data = require.context('images/', false, /\.(jpg|png|jpeg)$/);
-    const images: CustomImage[] = data.keys().slice(data.keys().length/2).reverse().map(function(x) {
-        return {src: data(x), original: data(x), width: (x.indexOf("_.jpg")>0 ? 400 : 600), height: (x.indexOf("_.jpg")>0 ? 600 : 400)}
-    });
-
-    const slides = images.map(({ original, width, height }) => ({
-        src: original,
-        width,
-        height,
-    }));
-
     return (
         <div className="Gallery">
             <Header/>
-            <Gallery
-                images={images}
-                onClick={handleClick}
-                enableImageSelection={false}
-            />
-            <Lightbox
-                slides={slides}
-                open={index >= 0}
-                index={index}
-                close={() => setIndex(-1)}
-            />
+            <h3>Paintings:</h3>
+            <Painting/>
+            <h3>Pottery:</h3>
+            <Pottery/>
+            <h3>Photography:</h3>
+            <Photography/>
             <Footer/>
         </div>
     )
