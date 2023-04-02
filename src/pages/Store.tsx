@@ -6,6 +6,7 @@ function StorePage() {
     return (
         <div className="Store">
             <Header/>
+            <p>Coming Soon</p>
             <Footer/>
         </div>
     )

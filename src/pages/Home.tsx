@@ -9,28 +9,15 @@ function HomePage() {
             <main>
                 <section>
                     <h1>Welcome to our Website</h1>
-                    <p>We are a company that specializes in providing high-quality products and services to our customers. Our mission is to exceed your expectations and provide you with the best possible experience.</p>
-                </section>
-                <section>
-                    <h2>Featured Products</h2>
-                    <article>
-                        <h3>Product 1</h3>
-                        <img src="product1.jpg" alt="Product 1" />
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor magna a lacus ultrices convallis.</p>
-                        <a href="/">Learn more</a>
-                    </article>
-                    <article>
-                        <h3>Product 2</h3>
-                        <img src="product2.jpg" alt="Product 2" />
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor magna a lacus ultrices convallis.</p>
-                        <a href="/">Learn more</a>
-                    </article>
-                    <article>
-                        <h3>Product 3</h3>
-                        <img src="product3.jpg" alt="Product 3" />
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor magna a lacus ultrices convallis.</p>
-                        <a href="/">Learn more</a>
-                    </article>
+                    <p>
+                        Welcome to Brooks' Studio, where precision and creativity meet. We are excited to announce the launch of our brand new website,
+                        featuring a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings. Soon, you will be
+                        able to purchase prints and ceramics directly from our online shop. In the meantime, please use our contact form to inquire about
+                        commissioned work. We would love to collaborate with you to create something beautiful and unique.<br/><br/>
+
+                        Follow us on Instagram and Facebook to stay up-to-date with our latest projects and inspiration. Thank you for visiting our site,
+                        and we look forward to connecting with you soon!
+                    </p>
                 </section>
             </main>
             <Footer />
