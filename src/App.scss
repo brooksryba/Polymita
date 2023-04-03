@@ -118,6 +118,14 @@ form {
     section p {
         padding-left: 25px;
         border-left: 5px solid #eee;
+
+        &.accent {
+            border-color: #b761582e;
+        }
+
+        &.accentSecondary {
+            border-color: #585eb72e;
+        }
     }
 
     footer {

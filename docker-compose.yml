@@ -1,0 +1,14 @@
+version: '3'
+services:
+  brooksrybaproject:
+    container_name: brooksrybaproject
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+    - 3000:3000
+    networks:
+    - application
+
+networks:
+  application: {}

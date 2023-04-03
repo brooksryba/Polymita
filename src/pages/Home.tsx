@@ -16,7 +16,8 @@ function HomePage() {
                         At Brooks' Studio, we believe in the beauty of the unseen. Macro, from the Greek word "makros" meaning "large" or "long," allows us to explore
                         the world in a way that is often overlooked. Through our macro photography, we capture the intricate details of everyday objects, revealing a
                         world of texture, color, and complexity that is often hidden from view.<br/><br/>
-
+                    </p>
+                    <p className="accent">
                         In addition to our photography, we offer handmade ceramics and photorealistic digital paintings, all crafted with the same level of precision
                         and attention to detail. While our online shop is coming soon, we welcome you to use our contact form to inquire about commissioned work.
                         We are passionate about collaborating with our clients to create unique and personalized pieces.<br/><br/>

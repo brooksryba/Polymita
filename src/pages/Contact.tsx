@@ -18,8 +18,8 @@ function ContactPage() {
                     particular concerns you may have about getting the project done right, such as color schemes, size specifications, or specific details
                     you'd like included. Brooks will work closely with you to ensure that the final product meets your expectations.<br/><br/>
                 </p>
-                <hr/>
-                <p>
+                <h4>Notes</h4>
+                <p className="accent">
                     For custom pottery pieces, Brooks will begin by discussing the design with you and creating a sketch or prototype for your approval.
                     Once the design is finalized, he will begin the process of throwing, trimming, and glazing the piece to perfection. For photography projects,
                     Brooks will work with you to select the perfect location and ensure that the lighting and composition are just right.

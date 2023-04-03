@@ -19,7 +19,7 @@ function AboutPage() {
                     led him to create an at-home studio, where he is able to hone his craft and offer his work for sale to the public.
                 </p>
                 <h3>Artist Statement:</h3>
-                <p>
+                <p className="accent">
                     As an artist, Brooks is driven by a passion for precision and technical design, which is evident in their diverse body of work. From macro
                     photography to handmade ceramic mugs to photorealistic digital paintings, they strive to create pieces that are not only visually striking
                     but also meticulously crafted.<br/><br/>
@@ -36,7 +36,7 @@ function AboutPage() {
                     themselves through their art.
                 </p>
                 <h3>Process:</h3>
-                <p>
+                <p className="accentSecondary">
                     As a ceramic artist working from their home studio, Brooks' process is deeply rooted in the tactile nature of working with clay. Using their
                     Skutt-818 kiln and spare bedroom turned pottery studio, they are able to fully immerse themselves in the creative process. Each piece they create
                     begins on the wheel, where they carefully mold and shape the clay into the desired form. From there, they move on to the glazing process, carefully
