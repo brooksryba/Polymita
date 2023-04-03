@@ -11,4 +11,6 @@ services:
     - application
 
 networks:
-  application: {}
+  application:
+    external: true
+    name: brooksrybaproject_application
