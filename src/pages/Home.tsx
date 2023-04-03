@@ -13,7 +13,7 @@ function HomePage() {
                         Welcome to Brooks' Studio, where the worlds of precision and creativity converge. We are thrilled to announce the launch of our brand new website,
                         showcasing a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings.<br/><br/>
 
-                        At Brooks' Studio, we believe in the beauty of the unseen. Macro, from the Greek word "makros" meaning "large" or "long," allows us to explore
+                        We believe in the beauty of the unseen. Macro, from the Greek word "makros" meaning "large" or "long," allows us to explore
                         the world in a way that is often overlooked. Through our macro photography, we capture the intricate details of everyday objects, revealing a
                         world of texture, color, and complexity that is often hidden from view.<br/><br/>
                     </p>
