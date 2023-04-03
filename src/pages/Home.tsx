@@ -8,7 +8,7 @@ function HomePage() {
             <Header />
             <main>
                 <section>
-                    <h1>Welcome to our Website</h1>
+                    <h1>Welcome to the Studio</h1>
                     <p>
                         Welcome to Brooks' Studio, where the worlds of precision and creativity converge. We are thrilled to announce the launch of our brand new website,
                         showcasing a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings.<br/><br/>
