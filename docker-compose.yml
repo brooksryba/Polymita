@@ -9,6 +9,15 @@ services:
     - 3000:3000
     networks:
     - application
+  brooksrybaproject_api:
+    container_name: brooksrybaproject_api
+    build:
+      context: ./
+      dockerfile: Dockerfile-server
+    ports:
+    - 3001:80
+    networks:
+    - application
 
 networks:
   application:
