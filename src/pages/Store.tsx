@@ -1,12 +1,13 @@
 import Header from 'components/Header'
 import Footer from 'components/Footer'
+import StoreFront from 'components/StoreFront'
 import 'App.scss';
 
 function StorePage() {
     return (
         <div className="Store">
             <Header/>
-            <p>Coming Soon</p>
+            <StoreFront/>
             <Footer/>
         </div>
     )

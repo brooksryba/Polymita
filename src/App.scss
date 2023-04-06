@@ -7,6 +7,11 @@ body {
     font-family: 'Marcellus', serif;
     background-color: #fff;
 
+    .material-symbols-outlined {
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+
     hr {
         border: none;
         border-top: 1px solid #aaa;
@@ -47,7 +52,7 @@ body {
             text-align: left;
             list-style: none;
             margin: 0 auto;
-            width: 380px;
+            width: 390px;
             padding: 0px;
 
             li {
@@ -80,6 +85,101 @@ body {
     }
 
     div {
+        &.Store {
+            font-family: 'IBM Plex Serif', serif;
+
+            div {
+                &.sidebar {
+                    width: 220px;
+                    display: inline-block;
+                    vertical-align: top;
+                    margin-right: 20px;
+                }
+
+                &.StoreFilter {
+                    width: 100%;
+                    border: 1px solid #aaa;
+                    border-radius: 6px;
+                    padding: 20px;
+                    box-sizing: border-box;
+                    box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
+
+                    h3 {
+                        display: inline-block;
+                        margin-top: 0px;
+                        margin-bottom: 10px;
+                    }
+
+                    hr {
+                        margin: 20px 0;
+                    }
+
+                    label {
+                        font-size: .85em;
+                    }
+
+                    select {
+                        width: 100%;
+                        margin-top: 5px;
+                        font-family: 'IBM Plex Serif', serif;
+                    }
+
+                    input[type=range] {
+                        width: calc(100% - 50px);
+                        vertical-align: middle;
+                    }
+
+                    span.price {
+                        font-family: 'Cinzel Decorative', cursive;
+                        font-size: 12px;
+                        vertical-align: middle;
+                    }
+                }
+
+                &.StoreCart {
+                    width: 100%;
+                    border: 1px solid #aaa;
+                    border-radius: 6px;
+                    padding: 20px 20px;
+                    display: inline-block;
+                    vertical-align: top;
+                    box-sizing: border-box;
+                    margin-top: 20px;
+                    box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
+                }
+
+                &.StoreItems {
+                    width: calc(100% - 250px);
+                    min-height: 600px;
+                    border: 1px solid #aaa;
+                    border-radius: 6px;
+                    display: inline-block;
+                    vertical-align: top;
+                    box-sizing: border-box;
+                    box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
+                    padding: 20px;
+
+                    div.item {
+                        font-size: 0.8em;
+
+                        width: calc(33% - 10px);
+                        padding: 8px;
+                        border: 1px solid #aaa;
+                        border-radius: 6px;
+                        display: inline-block;
+                        vertical-align: top;
+                        box-sizing: border-box;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+
+                        img {
+                            width: 100%;
+                            border-radius: 4px;
+                        }
+                    }
+                }
+            }
+        }
         &.Contact {
             form#ContactForm {
                 display: inline-block;
@@ -154,6 +254,7 @@ body {
         margin-top: 50px;
         text-align: center;
         font-size: 14px;
+        line-height: 40px;
         font-family: 'Cinzel Decorative', cursive;
     }
 }
