@@ -1,6 +1,4 @@
-import Painting from '../components/Painting';
-import Photography from 'components/Photography';
-import Pottery from 'components/Pottery';
+import GallerySet from 'components/GallerySet';
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import 'App.scss';
@@ -10,12 +8,14 @@ function GalleryPage() {
     return (
         <div className="Gallery">
             <Header/>
-            <h3>Paintings:</h3>
-            <Painting/>
-            <h3>Pottery:</h3>
-            <Pottery/>
-            <h3>Photography:</h3>
-            <Photography/>
+            <section>
+                <h3>Paintings:</h3>
+                <GallerySet source={require.context("images/painting", false, /\.(webp)$/)}/>
+                <h3>Pottery:</h3>
+                <GallerySet source={require.context("images/pottery", false, /\.(webp)$/)}/>
+                <h3>Photography:</h3>
+                <GallerySet source={require.context("images/photography", false, /\.(webp)$/)}/>
+            </section>
             <Footer/>
         </div>
     )

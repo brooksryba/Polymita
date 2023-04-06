@@ -1,58 +1,11 @@
-.Contact {
-    section.info {
-        display: inline-block;
-        max-width: 450px;
-    }
-    p.submitted {
-        padding: 50px 0px;
-        text-align: center;
-    }
-}
-
-
-form {
-    &#ContactForm {
-        display: inline-block;
-        vertical-align: top;
-        width: 330px;
-        margin-left: 50px;
-    }
-
-    padding: 40px;
-
-    label {
-        display: inline-block;
-        margin-top: 6px;
-        margin-right: 10px;
-        width: 150px;
-        vertical-align: top;
-    }
-    input[type=text], input[type=email], textarea {
-        padding: 8px 16px;
-        margin-bottom: 10px;
-        border-radius: 6px;
-        border: 1px solid #aaa;
-        width: 300px;
-    }
-
-    textarea {
-        height: 300px;
-    }
-
-    div.submit {
-        text-align: right;
-    }
-
-    input[type=submit] {
-        width: 120px;
-        height: 35px;
-    }
+body {
+    margin: 0px 0px;
+    background-color: #eee;
 }
 
 #root {
     font-family: 'Marcellus', serif;
-    max-width: 1000px;
-    margin: 0 auto;
+    background-color: #fff;
 
     hr {
         border: none;
@@ -62,14 +15,16 @@ form {
     header {
         text-align: center;
         margin-bottom: 50px;
+        padding-top: 40px;
 
         h1 {
             font-family: 'Cinzel Decorative', cursive;
             font-size: 4em;
-            margin-bottom: -30px;
+            line-height: 1em;
+            margin: 0;
 
-            background: rgb(2,0,36);
-            background: linear-gradient(0deg, rgba(148,148,148,1) 0%, rgba(0,0,0,1) 100%);
+            background: rgb(2, 0, 36);
+            background: linear-gradient(0deg, rgba(148, 148, 148, 1) 0%, rgba(0, 0, 0, 1) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -78,8 +33,10 @@ form {
         h2 {
             font-family: 'Cinzel Decorative', cursive;
             font-size: 1.5em;
-            background: rgb(129,181,143);
-            background: radial-gradient(circle, rgba(129,181,143,1) 0%, rgba(79,160,217,1) 60%);
+            line-height: 1.5em;
+            margin: 0;
+            background: rgb(129, 181, 143);
+            background: radial-gradient(circle, rgba(129, 181, 143, 1) 0%, rgba(79, 160, 217, 1) 60%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -90,16 +47,19 @@ form {
             text-align: left;
             list-style: none;
             margin: 0 auto;
-            width: 480px;
+            width: 380px;
+            padding: 0px;
 
             li {
                 display: inline-block;
-                padding-right: 20px;
-                margin-right: 20px;
+                padding-right: 15px;
+                margin-right: 15px;
                 border-right: 1px dotted #333;
 
                 &:last-of-type {
                     border-right: none;
+                    margin-right: 0px;
+                    padding-right: 0px;
                 }
 
                 a {
@@ -115,21 +75,115 @@ form {
         }
     }
 
-    section p {
-        padding-left: 25px;
-        border-left: 5px solid #eee;
+    & > div > section {
+        padding: 0px 20px;
+    }
 
-        &.accent {
-            border-color: #b761582e;
+    div {
+        &.Contact {
+            form#ContactForm {
+                display: inline-block;
+                vertical-align: top;
+                width: 100%;
+            }
+
+            section.info {
+                display: inline-block;
+                max-width: 450px;
+            }
+
+            p.submitted {
+                padding: 50px 0px;
+                text-align: center;
+            }
         }
 
-        &.accentSecondary {
-            border-color: #585eb72e;
+        p {
+            padding-left: 25px;
+            border-left: 5px solid #eee;
+
+            &.accent {
+                border-color: #b761582e;
+            }
+
+            &.accentSecondary {
+                border-color: #585eb72e;
+            }
         }
     }
+
+    form {
+        margin-top: 25px;
+
+        label {
+            box-sizing: border-box;
+            display: inline-block;
+            margin-top: 6px;
+            margin-right: 10px;
+            width: 100%;
+            vertical-align: top;
+        }
+
+        input[type=text],
+        input[type=email],
+        textarea {
+            box-sizing: border-box;
+            padding: 8px 16px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+            width: 100%;
+        }
+
+        textarea {
+            height: 200px;
+        }
+
+        div.submit {
+            text-align: right;
+        }
+
+        input[type=submit] {
+            width: 50%;
+            height: 35px;
+        }
+    }
+
 
     footer {
         margin-top: 50px;
         text-align: center;
+        font-size: 14px;
+        font-family: 'Cinzel Decorative', cursive;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #root {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 10px 100px;
+        border: 1px solid #ccc;
+        border-top: none;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05);
+
+        div.Contact {
+            section.info {
+                width: calc(50% - 50px);
+                box-sizing: border-box;
+            }
+            form#ContactForm {
+                box-sizing: border-box;
+                width: calc(50%);
+                margin-left: 50px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #root {
+        max-width: 100%;
+        overflow-x: hidden;
     }
 }
