@@ -12,9 +12,9 @@ function Photography() {
     const [index, setIndex] = useState(-1);
     const handleClick = (index: number) => setIndex(index);
 
-    const photos = require.context('images/photography', false, /\.(jpg|png|jpeg)$/);
+    const photos = require.context('images/photography', false, /\.(webp)$/);
     const photoset: CustomImage[] = photos.keys().slice(photos.keys().length/2).reverse().map(function(x) {
-        return {src: photos(x), original: photos(x), width: (x.indexOf("_.jpg")>0 ? 4000 : 6000), height: (x.indexOf("_.jpg")>0 ? 6000 : 4000)}
+        return {src: photos(x), original: photos(x), width: (x.indexOf("_.webp")>0 ? 4000 : 6000), height: (x.indexOf("_.webp")>0 ? 6000 : 4000)}
     });
 
     const slides = photoset.map(({ original, width, height }) => ({
