@@ -16,6 +16,18 @@ function StoreFilter() {
             </select><br />
             <hr />
 
+            <label>
+                <span className="material-symbols-outlined">
+                    sort_by_alpha
+                </span>Sort By:</label><br />
+            <select id="sort">
+                <option>Release Date</option>
+                <option>Type</option>
+                <option>Price</option>
+            </select><br />
+            <hr />
+
+
             <label><span className="material-symbols-outlined">
                 price_change
             </span>Price Range:</label><br />

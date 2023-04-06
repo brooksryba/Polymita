@@ -89,13 +89,6 @@ body {
             font-family: 'IBM Plex Serif', serif;
 
             div {
-                &.sidebar {
-                    width: 220px;
-                    display: inline-block;
-                    vertical-align: top;
-                    margin-right: 20px;
-                }
-
                 &.StoreFilter {
                     width: 100%;
                     border: 1px solid #aaa;
@@ -145,12 +138,11 @@ body {
                     vertical-align: top;
                     box-sizing: border-box;
                     margin-top: 20px;
+                    margin-bottom: 20px;
                     box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
                 }
 
                 &.StoreItems {
-                    width: calc(100% - 250px);
-                    min-height: 600px;
                     border: 1px solid #aaa;
                     border-radius: 6px;
                     display: inline-block;
@@ -160,9 +152,9 @@ body {
                     padding: 20px;
 
                     div.item {
+                        color: #888;
                         font-size: 0.8em;
 
-                        width: calc(33% - 10px);
                         padding: 8px;
                         border: 1px solid #aaa;
                         border-radius: 6px;
@@ -172,9 +164,20 @@ body {
                         margin-right: 10px;
                         margin-bottom: 10px;
 
-                        img {
+                        div.image {
+                            text-align: center;
                             width: 100%;
                             border-radius: 4px;
+                            background-color: #c5803e;
+                        }
+
+                        img {
+                            max-width: 100%;
+                            border-radius: 4px;
+                        }
+
+                        span {
+                            color: #000;
                         }
                     }
                 }
@@ -277,6 +280,29 @@ body {
                 box-sizing: border-box;
                 width: calc(50%);
                 margin-left: 50px;
+            }
+        }
+
+        div.Store {
+            div {
+                &.sidebar {
+                    width: 220px;
+                    margin-right: 20px;
+                    display: inline-block;
+                    vertical-align: top;
+                }
+
+                &.StoreItems {
+                    width: calc(100% - 250px);
+
+                    div.item {
+                        width: calc(33% - 10px);
+
+                        img {
+                            max-height: 128px;
+                        }
+                    }
+                }
             }
         }
     }
