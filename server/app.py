@@ -1,37 +1,54 @@
-from flask import Flask, request
-import requests
+import os
+import datetime
+import easypost
+from easypost import Address, Parcel, Shipment
+from flask import Flask, request, g, jsonify
+
+from database import Product, Order, OrderProduct, Session, SQLAlchemyEncoder
+
 
 app = Flask(__name__)
+app.json_encoder = SQLAlchemyEncoder
+easypost.api_key = "EZTKb66dfac4a667469bb680848e771f1014B4dbPVHe0AP1tNlJyM4rSg"
 
-@app.route('/shipping', methods=['GET'])
+
+@app.before_request
+def before_request():
+    g.session = Session()
+
+@app.teardown_request
+def teardown_request(exception):
+    session = getattr(g, 'session', None)
+    if session is not None:
+        session.close()
+
+
+@app.route('/calculator', methods=['GET'])
 def calculate_shipping():
-    # USPS shipping calculator URL
-    url = 'http://production.shippingapis.com/ShippingAPI.dll?API=RateV4&XML='
+    origin = Address.create(zip=request.args.get("origin"))
+    dest = Address.create(zip=request.args.get("dest"))
+    parcel = Parcel.create(weight=16*int(request.args.get("weight")))
+    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
 
-    # Required parameters for the USPS shipping calculator
-    origin_zip = request.args.get('origin_zip')
-    dest_zip = request.args.get('dest_zip')
-    weight = request.args.get('weight')
+    return [{'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]
 
-    # Build the XML request for the USPS shipping calculator
-    xml_request = f'''<RateV4Request USERID="your_usps_userid">
-                        <Package ID="0">
-                            <Service>ALL</Service>
-                            <ZipOrigination>{origin_zip}</ZipOrigination>
-                            <ZipDestination>{dest_zip}</ZipDestination>
-                            <Pounds>{weight}</Pounds>
-                            <Ounces>0</Ounces>
-                            <Container></Container>
-                            <Size>REGULAR</Size>
-                            <Machinable>true</Machinable>
-                        </Package>
-                    </RateV4Request>'''
+@app.route('/purchase', methods=['GET'])
+def purchase():
+    product = Product.find(2)
+    return jsonify(product.update(quantity=product.quantity-1))
 
-    # Send the request to the USPS shipping calculator and get the response
-    response = requests.get(url + xml_request)
+@app.route('/list', methods=['GET'])
+def list():
+    return jsonify(Product.filter(lambda product: product.quantity > 0))
 
-    # Return the response from the USPS shipping calculator
-    return response.text
+@app.route('/list_all', methods=['GET'])
+def list_all():
+    return jsonify(Product.find_all())
+
+@app.route('/create', methods=['GET'])
+def create():
+    return jsonify(Product.create(quantity=10, name='Widget', date=datetime.datetime.now(),
+                    price=12.34, weight=1.23, size='Medium'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
