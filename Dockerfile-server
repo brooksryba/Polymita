@@ -5,7 +5,7 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # Install Flask and its dependencies using pip
-RUN pip install --trusted-host pypi.python.org flask gunicorn
+RUN pip install --trusted-host pypi.python.org flask gunicorn requests
 
 # Copy the current directory contents into the container at /app
 COPY ./server /app
