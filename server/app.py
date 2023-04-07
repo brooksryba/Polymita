@@ -65,13 +65,12 @@ def purchase():
     dest = Address.create(zip=request.json.get("zip"))
     parcel = Parcel.create(weight=int(16*weight))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
-    label_cost = float([s for s in shipment.rates if s.service == service][0].rate)
-    amount += label_cost
 
+    amount += float([s for s in shipment.rates if s.service == service][0].rate)
     amount *= PAYPAL_FEE
 
     order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
-    Order.create(id=order["id"], date=datetime.datetime.now(), products=products, weight=weight, service=service, label=label_cost, is_processed=False, is_shipped=False)
+    Order.create(id=order["id"], date=datetime.datetime.now(), products=products, weight=weight, service=service, is_processed=False, is_shipped=False)
     return order
 
 @app.route('/confirm', methods=['POST'])
@@ -110,18 +109,13 @@ def confirm():
     )
     parcel = Parcel.create(weight=int(16*order.weight))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
-    try:
-        shipment.buy(rate=[s for s in shipment.rates if s.service == order.service][0])
-    except Exception as e:
-        #  Put debugger here and Check exception e.json_body
-        print(e.json_body)
-        import pdb; pdb.set_trace();
-        raise ValidationError({'detail': e.http_body})
+    shipment.buy(rate=[s for s in shipment.rates if s.service == order.service][0])
 
     order.update(email=capture.get("payer").get("email_address"),
                 fee=receivables["paypal_fee"]["value"],
                 price=receivables["gross_amount"]["value"],
                 net=receivables["net_amount"]["value"],
+                label=[s for s in shipment.rates if s.service == order.service][0].rate,
                 address=address,
                 is_processed=True)
 
