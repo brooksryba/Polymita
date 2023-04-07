@@ -66,7 +66,6 @@ class Product(Base, BaseExtension):
     size = Column(String)
     image = Column(String)
 
-    orders = relationship('Order', secondary='order_products', backref='products')
 
 # Define the Order class
 class Order(Base, BaseExtension):
@@ -77,15 +76,6 @@ class Order(Base, BaseExtension):
     shipping = Column(Float)
     is_processed = Column(Boolean)
     is_shipped = Column(Boolean)
-
-# Define the association table between orders and products
-class OrderProduct(Base, BaseExtension):
-    __tablename__ = 'order_products'
-    order_id = Column(Integer, ForeignKey('orders.id'), primary_key=True)
-    product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
-    quantity = Column(Integer)
-
-    product = relationship('Product', backref=backref('order_assoc'))
 
 # Create the tables in the database
 Base.metadata.create_all(engine)

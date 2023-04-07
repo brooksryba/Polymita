@@ -1,15 +1,31 @@
 import os
 import datetime
+import paypalrestsdk
 import easypost
 from easypost import Address, Parcel, Shipment
 from flask import Flask, request, g, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
 
-from database import Product, Order, OrderProduct, Session, SQLAlchemyEncoder
+from paypal import PayPal
+from database import Product, Order, Session, SQLAlchemyEncoder
 
+load_dotenv()
+PAYPAL_CLIENT_ID = os.environ.get("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
+EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
+ORIGIN_ZIP = os.environ.get("ORIGIN_ZIP")
 
 app = Flask(__name__)
 app.json_encoder = SQLAlchemyEncoder
-easypost.api_key = "EZTKb66dfac4a667469bb680848e771f1014B4dbPVHe0AP1tNlJyM4rSg"
+CORS(app)
+
+easypost.api_key = EASYPOST_API_KEY
+paypalrestsdk.configure({
+    "mode": "sandbox", # or "live" for production
+    "client_id": PAYPAL_CLIENT_ID,
+    "client_secret": PAYPAL_CLIENT_SECRET
+})
 
 
 @app.before_request
@@ -23,19 +39,23 @@ def teardown_request(exception):
         session.close()
 
 
-@app.route('/calculator', methods=['GET'])
-def calculate_shipping():
-    origin = Address.create(zip=request.args.get("origin"))
+@app.route('/estimate', methods=['GET'])
+def estimate():
+    origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.args.get("dest"))
     parcel = Parcel.create(weight=16*int(request.args.get("weight")))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
 
     return [{'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]
 
-@app.route('/purchase', methods=['GET'])
+@app.route('/purchase', methods=['POST'])
 def purchase():
     product = Product.find(2)
-    return jsonify(product.update(quantity=product.quantity-1))
+    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order()
+
+@app.route('/confirm', methods=['POST'])
+def confirm():
+    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=request.json.get("orderID"))
 
 @app.route('/list', methods=['GET'])
 def list():
@@ -45,10 +65,16 @@ def list():
 def list_all():
     return jsonify(Product.find_all())
 
-@app.route('/create', methods=['GET'])
+@app.route('/fixtures', methods=['GET'])
 def create():
-    return jsonify(Product.create(quantity=10, name='Widget', date=datetime.datetime.now(),
-                    price=12.34, weight=1.23, size='Medium'))
+    products = []
+    products.append(Product.create(quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=1, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=1, name="Toasted Mallow Planter", image="images/pottery/IMG_6799_.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=1, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    return jsonify(products)
 
 if __name__ == '__main__':
     app.run(debug=True)
