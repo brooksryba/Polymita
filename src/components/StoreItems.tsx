@@ -1,32 +1,35 @@
-import { useEffect, useState } from "react";
+import { StoreItem, StoreItemsProps } from 'types/Store'
 
-type StoreItem = {
-  id: number;
-  name: string;
-  date: number;
-  price: number;
-  image: string;
-};
+const StoreItems: React.FC<StoreItemsProps> = ({ items, cartItems, setCartItems }) => {
+    function addItemToCart(item: StoreItem) {
+        const existingItemIndex = cartItems.findIndex(
+            (cartItem) => cartItem.id === item.id
+        );
 
-function StoreItems() {
-    const [items, setItems] = useState<StoreItem[]>([]);
+        const existingItemRefIndex = items.findIndex(
+            (cartItem) => cartItem.id === item.id
+        );
 
-    useEffect(() => {
-      fetch("http://localhost:5000/list")
-        .then((response) => response.json())
-        .then((data: StoreItem[]) => {
-          setItems(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }, []);
+        const updatedCartItems = [...cartItems];
+        if (existingItemIndex !== -1) {
+            if (updatedCartItems[existingItemIndex].quantity < items[existingItemRefIndex].quantity) {
+                updatedCartItems[existingItemIndex].quantity++;
+            } else {
+
+            }
+        } else {
+            updatedCartItems.push({ ...item, quantity: 1 });
+        }
+        setCartItems(updatedCartItems);
+    }
 
     return (
         <div className="StoreItems">
-            {items.map((item) => (
-            <div className="item">
-                <img alt="" src={require.context("images/pottery", false, /\.(webp)$/)(item.image)}/>
+            {items.map((item: StoreItem) => (
+            <div className="item" onClick={() => addItemToCart(item)}>
+                <div className="image">
+                    <img alt="" src={require.context("images/pottery", false, /\.(webp)$/)(item.image)}/>
+                </div>
                 <hr/>
                 <span className="title">{item.name}</span><br/>
                 Price: <span className="price">${item.price}</span><br/>

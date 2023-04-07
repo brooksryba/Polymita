@@ -10,7 +10,7 @@ class PayPal:
             "production": "https://api-m.paypal.com"
         }
 
-    def create_order(self):
+    def create_order(self, amount):
         access_token = self.generate_access_token()
         url = f"{self.baseURL['sandbox']}/v2/checkout/orders"
         response = requests.post(url, json={
@@ -19,7 +19,7 @@ class PayPal:
                 {
                     "amount": {
                         "currency_code": "USD",
-                        "value": "100.00",
+                        "value": str(amount),
                     },
                 },
             ],

@@ -50,12 +50,22 @@ def estimate():
 
 @app.route('/purchase', methods=['POST'])
 def purchase():
-    product = Product.find(2)
-    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order()
+    amount = float(0.0)
+    for item in request.json.get("cart"):
+        product = Product.find(item['id'])
+        amount += product.price * item['quantity']
+    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=amount)
 
 @app.route('/confirm', methods=['POST'])
 def confirm():
-    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=request.json.get("orderID"))
+    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=request.json.get("orderID"))
+    order = Order.create(email=capture.get("payer").get("email_address"),
+                        date=datetime.datetime.now())
+    return jsonify(order)
+
+@app.route('/orders', methods=['GET'])
+def orders():
+    return jsonify(Order.find_all())
 
 @app.route('/list', methods=['GET'])
 def list():
@@ -71,9 +81,9 @@ def create():
     products.append(Product.create(quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
     products.append(Product.create(quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
     products.append(Product.create(quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(quantity=1, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=2, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
     products.append(Product.create(quantity=1, name="Toasted Mallow Planter", image="images/pottery/IMG_6799_.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(quantity=1, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(quantity=2, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now(), price=30.00, weight=1.5, size='12 fl. oz.',))
     return jsonify(products)
 
 if __name__ == '__main__':

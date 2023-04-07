@@ -5,12 +5,11 @@ import {
     usePayPalScriptReducer
 } from "@paypal/react-paypal-js";
 
+
 const amount = "2";
 const style = {};
 
-export const ButtonWrapper: React.FC<{ showSpinner: boolean }> = ({ showSpinner }) => {
-    // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
-    // This is the main reason to wrap the PayPalButtons in a new component
+export const ButtonWrapper: React.FC<{ showSpinner: boolean, cartItems: any }> = ({ showSpinner, cartItems }) => {
     const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
 
     useEffect(() => {
@@ -31,17 +30,11 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean }> = ({ showSpinner 
                 forceReRender={[amount, style]}
                 fundingSource={undefined}
                 createOrder={() => {
-                    // Order is created on the server and the order id is returned
                     return fetch("http://localhost:5000/purchase", {
                         method: "POST",
                         headers: {"Content-Type": "application/json",},
                         body: JSON.stringify({
-                            cart: [
-                                {
-                                sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
-                                quantity: "YOUR_PRODUCT_QUANTITY",
-                                },
-                            ],
+                            cart: cartItems,
                         }),
                     })
                     .then((response) => response.json())
@@ -50,9 +43,7 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean }> = ({ showSpinner 
                 onApprove={function (data) {
                     return fetch("http://localhost:5000/confirm", {
                         method: "POST",
-                        headers: {
-                        "Content-Type": "application/json",
-                        },
+                        headers: {"Content-Type": "application/json",},
                         body: JSON.stringify({
                             orderID: data.orderID
                         })
