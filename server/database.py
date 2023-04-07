@@ -1,7 +1,7 @@
 import json
 import datetime
 from flask import g
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Float, Boolean, ForeignKey
+from sqlalchemy import create_engine, Column, JSON, Integer, String, DateTime, Float, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -76,10 +76,15 @@ class Order(Base, BaseExtension):
     address = Column(String)
     fee = Column(Float)
     price = Column(Float)
-    profit = Column(Float)
+    net = Column(Float)
     label = Column(Float)
+    service = Column(String)
+    products = Column(JSON)
+    weight = Column(Float)
     is_processed = Column(Boolean)
     is_shipped = Column(Boolean)
+    shipping_date = Column(DateTime)
+    shipping_number = Column(String)
 
 # Create the tables in the database
 Base.metadata.create_all(engine)

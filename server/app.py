@@ -53,22 +53,25 @@ def estimate():
 def purchase():
     weight = float(0.0)
     amount = float(0.0)
+    products = []
     for item in request.json.get("cart"):
         product = Product.find(item['id'])
         weight += product.weight
         amount += product.price * item['quantity']
+        products.append({"id": product.id, "quantity": product.quantity})
 
+    service = request.json.get("service")
     origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.json.get("zip"))
     parcel = Parcel.create(weight=int(16*weight))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
-    label_cost = float([s for s in shipment.rates if s.service == request.json.get("service")][0].rate)
+    label_cost = float([s for s in shipment.rates if s.service == service][0].rate)
     amount += label_cost
 
     amount *= PAYPAL_FEE
 
     order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
-    Order.create(id=order["id"], date=datetime.datetime.now(), label=label_cost, is_processed=False, is_shipped=False)
+    Order.create(id=order["id"], date=datetime.datetime.now(), products=products, weight=weight, service=service, label=label_cost, is_processed=False, is_shipped=False)
     return order
 
 @app.route('/confirm', methods=['POST'])
@@ -76,11 +79,52 @@ def confirm():
     order_id = request.json.get("orderID")
     capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=order_id)
     receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
+    destination = capture['purchase_units'][0]["shipping"]["address"]
 
-    order = Order.find(order_id).update(email=capture.get("payer").get("email_address"),
-                                        fee=receivables["paypal_fee"]["value"],
-                                        price=receivables["gross_amount"]["value"],
-                                        profit=receivables["net_amount"]["value"])
+    address = ""
+    for key in ["address_line_1", "admin_area_1", "admin_area_2", "country_code", "postal_code"]:
+        address += destination[key] + " "
+
+    order = Order.find(order_id)
+
+    for meta in order.products:
+        product = Product.find(meta['id'])
+        product.update(quantity=product.quantity-meta['quantity'])
+
+    origin = Address.create(
+        name='Brooks Ryba',
+        street1='1601 Elijah Ln',
+        city='Howell',
+        state='MI',
+        zip='48843',
+        country='US',
+        phone='248-884-9404',
+        email='brooksryba@gmail.com')
+    dest = Address.create(
+        name=f"{capture['payer']['name']['given_name']} {capture['payer']['name']['surname']}",
+        street1=destination.get("address_line_1"),
+        city=destination.get("admin_area_2"),
+        state=destination.get("admin_area_1"),
+        zip=destination.get("postal_code"),
+        country=destination.get("country_code")
+    )
+    parcel = Parcel.create(weight=int(16*order.weight))
+    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
+    try:
+        shipment.buy(rate=[s for s in shipment.rates if s.service == order.service][0])
+    except Exception as e:
+        #  Put debugger here and Check exception e.json_body
+        print(e.json_body)
+        import pdb; pdb.set_trace();
+        raise ValidationError({'detail': e.http_body})
+
+    order.update(email=capture.get("payer").get("email_address"),
+                fee=receivables["paypal_fee"]["value"],
+                price=receivables["gross_amount"]["value"],
+                net=receivables["net_amount"]["value"],
+                address=address,
+                is_processed=True)
+
     return jsonify(order)
 
 @app.route('/orders', methods=['GET'])

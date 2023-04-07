@@ -37,7 +37,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ cartItems, setCartItems }) => {
             {cartItems.length > 0 ?
                 <>
                     {cartItems.map((item: StoreItem) => (
-                        <div className="item" onClick={() => removeItemFromCart(item)}>
+                        <div key={item.id} className="item" onClick={() => removeItemFromCart(item)}>
                             <div className="image">
                                 <img alt="" src={require.context("images/pottery", false, /\.(webp)$/)(item.image)}/>
                             </div>
