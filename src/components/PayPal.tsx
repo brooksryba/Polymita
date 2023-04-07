@@ -35,6 +35,8 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean, cartItems: any }> =
                         headers: {"Content-Type": "application/json",},
                         body: JSON.stringify({
                             cart: cartItems,
+                            zip: "12345",
+                            service: "Priority"
                         }),
                     })
                     .then((response) => response.json())

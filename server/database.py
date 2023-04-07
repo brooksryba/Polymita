@@ -70,10 +70,14 @@ class Product(Base, BaseExtension):
 # Define the Order class
 class Order(Base, BaseExtension):
     __tablename__ = 'orders'
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     email = Column(String)
     date = Column(DateTime)
-    shipping = Column(Float)
+    address = Column(String)
+    fee = Column(Float)
+    price = Column(Float)
+    profit = Column(Float)
+    label = Column(Float)
     is_processed = Column(Boolean)
     is_shipped = Column(Boolean)
 

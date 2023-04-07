@@ -11,6 +11,7 @@ from paypal import PayPal
 from database import Product, Order, Session, SQLAlchemyEncoder
 
 load_dotenv()
+PAYPAL_FEE = 1.0299
 PAYPAL_CLIENT_ID = os.environ.get("PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
@@ -50,17 +51,36 @@ def estimate():
 
 @app.route('/purchase', methods=['POST'])
 def purchase():
+    weight = float(0.0)
     amount = float(0.0)
     for item in request.json.get("cart"):
         product = Product.find(item['id'])
+        weight += product.weight
         amount += product.price * item['quantity']
-    return PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=amount)
+
+    origin = Address.create(zip=ORIGIN_ZIP)
+    dest = Address.create(zip=request.json.get("zip"))
+    parcel = Parcel.create(weight=int(16*weight))
+    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
+    label_cost = float([s for s in shipment.rates if s.service == request.json.get("service")][0].rate)
+    amount += label_cost
+
+    amount *= PAYPAL_FEE
+
+    order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
+    Order.create(id=order["id"], date=datetime.datetime.now(), label=label_cost, is_processed=False, is_shipped=False)
+    return order
 
 @app.route('/confirm', methods=['POST'])
 def confirm():
-    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=request.json.get("orderID"))
-    order = Order.create(email=capture.get("payer").get("email_address"),
-                        date=datetime.datetime.now())
+    order_id = request.json.get("orderID")
+    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=order_id)
+    receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
+
+    order = Order.find(order_id).update(email=capture.get("payer").get("email_address"),
+                                        fee=receivables["paypal_fee"]["value"],
+                                        price=receivables["gross_amount"]["value"],
+                                        profit=receivables["net_amount"]["value"])
     return jsonify(order)
 
 @app.route('/orders', methods=['GET'])
@@ -68,7 +88,7 @@ def orders():
     return jsonify(Order.find_all())
 
 @app.route('/list', methods=['GET'])
-def list():
+def list_active():
     return jsonify(Product.filter(lambda product: product.quantity > 0))
 
 @app.route('/list_all', methods=['GET'])
