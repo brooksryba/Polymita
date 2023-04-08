@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-
-import { StoreFilterProps } from "types/Store";
+import { StoreFilterProps, defaultStoreFilters } from "types/Store";
 
 const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
     const priceRef = useRef<HTMLInputElement>(null);
@@ -15,6 +14,12 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
         newFilter.price = Number(price);
         setFilter(newFilter);
     }, [price, sort, type]);
+
+    function doReset() {
+        setPrice(defaultStoreFilters.price);
+        setSort(defaultStoreFilters.sort);
+        setType(defaultStoreFilters.type);
+    }
 
     return (
         <div className="StoreFilter">
@@ -48,11 +53,11 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
                 price_change
             </span>Price Range:</label><br />
             <span className="price">$0</span>
-            <input ref={priceRef} type="range" id="price" name="rangeInput" defaultValue={100} min="0" max="100" step="1" onChange={(e) => setPrice(Number(e.target.value))} />
+            <input ref={priceRef} type="range" id="price" name="rangeInput" value={price} min="0" max="100" step="1" onChange={(e) => setPrice(Number(e.target.value))} />
             <span className="price">${price}</span><br />
             <hr />
 
-            <button>Reset</button>
+            <button onClick={() => doReset()}>Reset</button>
         </div>
     )
 }
