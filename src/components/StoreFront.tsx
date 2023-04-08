@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { StoreItem } from 'types/Store'
+import { StoreItem, StoreFilters, defaultStoreFilters } from 'types/Store'
 import StoreFilter from 'components/StoreFilter'
 import StoreItems from 'components/StoreItems'
 import StoreCart from 'components/StoreCart'
 
 
 function StoreFront() {
+    const [filter, setFilter] = useState<StoreFilters>(defaultStoreFilters);
     const [items, setItems] = useState<StoreItem[]>([]);
     const [cartItems, setCartItems] = useState<StoreItem[]>([]);
 
@@ -24,10 +25,10 @@ function StoreFront() {
     return (
         <section className='Store'>
             <div className='sidebar'>
-                <StoreFilter />
+                <StoreFilter filter={filter} setFilter={setFilter} />
                 <StoreCart cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems}/>
             </div>
-            <StoreItems cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems}/>
+            <StoreItems filter={filter} cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems}/>
         </section>
     )
 }

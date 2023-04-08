@@ -75,7 +75,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
                     {cartItems.map((item: StoreItem) => (
                         <div key={item.id} className="item" onClick={() => removeItemFromCart(item)}>
                             <div className="image">
-                                <img alt="" src={require.context("images/pottery", false, /\.(webp)$/)(item.image)} />
+                                <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)} />
                             </div>
                             <div className="data">
                                 <span className="title">{item.name}</span><br />

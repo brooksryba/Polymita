@@ -58,6 +58,7 @@ class BaseExtension:
 class Product(Base, BaseExtension):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True)
+    category = Column(String)
     quantity = Column(Integer)
     name = Column(String)
     date = Column(DateTime)
