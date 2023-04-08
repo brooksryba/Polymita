@@ -14,6 +14,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
     const estimateRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+        setIsCheckout(false);
         doEstimate();
     }, [cartItems]);
 

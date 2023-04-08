@@ -45,10 +45,8 @@ def teardown_request(exception):
 def estimate():
     origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.args.get("dest"))
-    parcel = Parcel.create(weight=16*int(float(request.args.get("weight"))))
+    parcel = Parcel.create(weight=16*float(request.args.get("weight")))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
-
-    print(dir(shipment.rates[0]))
 
     return {"rates":[{'delivery_days': r.delivery_days or 1, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
 
@@ -66,7 +64,7 @@ def purchase():
     service = request.json.get("service")
     origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.json.get("zip"))
-    parcel = Parcel.create(weight=int(16*weight))
+    parcel = Parcel.create(weight=16*weight)
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
 
     amount += float([s for s in shipment.rates if s.service == service][0].rate)
@@ -140,7 +138,7 @@ def list_all():
 @app.route('/fixtures', methods=['GET'])
 def create():
     products = []
-    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=0, size='8" x 10"',))
+    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=0.2, size='8" x 10"',))
     products.append(Product.create(category='pottery', quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=10.00, weight=1.5, size='12 fl oz',))
     products.append(Product.create(category='pottery', quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=20.00, weight=1.5, size='12 fl oz',))
     products.append(Product.create(category='pottery', quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=30.00, weight=1.5, size='12 fl oz',))
