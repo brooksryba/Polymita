@@ -91,7 +91,8 @@ def confirm():
 
     for meta in order.products:
         product = Product.find(meta['id'])
-        product.update(quantity=product.quantity-meta['quantity'])
+        if(product.quantity != -1):
+            product.update(quantity=product.quantity-meta['quantity'])
 
     origin = Address.create(
         name='Brooks Ryba',
@@ -130,7 +131,7 @@ def orders():
 
 @app.route('/list', methods=['GET'])
 def list_active():
-    return jsonify(Product.filter(lambda product: product.quantity > 0))
+    return jsonify(Product.filter(lambda product: product.quantity != 0))
 
 @app.route('/list_all', methods=['GET'])
 def list_all():
@@ -139,13 +140,13 @@ def list_all():
 @app.route('/fixtures', methods=['GET'])
 def create():
     products = []
-    products.append(Product.create(category='photography', quantity=1, name="Red Dragonfly Print (8x10)", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=0, size='8" x 10"',))
-    products.append(Product.create(category='pottery', quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=10.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(category='pottery', quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=20.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(category='pottery', quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=30.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(category='pottery', quantity=2, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(category='pottery', quantity=1, name="Toasted Mallow Planter", image="images/pottery/IMG_6799_.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=50.00, weight=1.5, size='12 fl. oz.',))
-    products.append(Product.create(category='pottery', quantity=2, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=60.00, weight=1.5, size='12 fl. oz.',))
+    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=0, size='8" x 10"',))
+    products.append(Product.create(category='pottery', quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=10.00, weight=1.5, size='12 fl oz',))
+    products.append(Product.create(category='pottery', quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=20.00, weight=1.5, size='12 fl oz',))
+    products.append(Product.create(category='pottery', quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=30.00, weight=1.5, size='12 fl oz',))
+    products.append(Product.create(category='pottery', quantity=2, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=1.5, size='12 fl oz',))
+    products.append(Product.create(category='pottery', quantity=1, name="Toasted Mallow Planter", image="images/pottery/IMG_6799_.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=50.00, weight=1.5, size='12 fl oz',))
+    products.append(Product.create(category='pottery', quantity=2, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=60.00, weight=1.5, size='12 fl oz',))
     return jsonify(products)
 
 if __name__ == '__main__':

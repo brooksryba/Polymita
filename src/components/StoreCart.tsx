@@ -33,10 +33,12 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
 
             if (updatedCartItems[existingItemIndex].quantity > 1) {
                 updatedCartItems[existingItemIndex].quantity--;
-                updatedItems[existingItemRefIndex].quantity++;
+                if(updatedItems[existingItemRefIndex].quantity !== -1)
+                    updatedItems[existingItemRefIndex].quantity++;
             } else {
                 updatedCartItems.splice(existingItemIndex, 1);
-                updatedItems[existingItemRefIndex].quantity++;
+                if(updatedItems[existingItemRefIndex].quantity !== -1)
+                    updatedItems[existingItemRefIndex].quantity++;
             }
             setCartItems(updatedCartItems);
             setItems(updatedItems);

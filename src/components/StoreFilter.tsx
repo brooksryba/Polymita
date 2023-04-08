@@ -45,6 +45,7 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
             <select id="sort" value={sort} onChange={(e) => setSort(e.target.value)}>
                 <option value="date">Release Date</option>
                 <option value="price">Price</option>
+                <option value="category">Type</option>
             </select><br />
             <hr />
 

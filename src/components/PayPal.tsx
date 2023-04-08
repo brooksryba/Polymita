@@ -19,7 +19,7 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean, cartItems: any }> =
                 ...options,
             },
         });
-    }, [showSpinner, dispatch, options]);
+    }, [showSpinner]);
 
 
     return (<>

@@ -213,6 +213,9 @@ body {
 
                             span.title {
                                 font-weight: bold;
+                                width: 160px;
+                                display: inline-block;
+                                white-space: initial;
                             }
                         }
                     }
@@ -349,9 +352,19 @@ body {
 div.swal2-popup.swal2-modal {
     font-family: 'IBM Plex Serif', serif;
 
+    div.swal2-html-container {
+        margin-top: 0px;
+    }
+
+    h2.swal2-title {
+        font-size: 1.775em;
+    }
+
     i {
-        &.limited-stock {
-            color: red;
+        &.stock {
+            &.limited {
+                color: red;
+            }
         }
     }
 

@@ -18,15 +18,17 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
         const updatedCartItems = [...cartItems];
         const updatedItems = [...items];
         if (existingItemIndex !== -1) {
-            if (updatedCartItems[existingItemIndex].quantity <= items[existingItemRefIndex].quantity) {
+            if (updatedCartItems[existingItemIndex].quantity <= items[existingItemRefIndex].quantity || items[existingItemRefIndex].quantity === -1) {
                 updatedCartItems[existingItemIndex].quantity++;
-                updatedItems[existingItemRefIndex].quantity--;
+                if(updatedItems[existingItemRefIndex].quantity !== -1)
+                    updatedItems[existingItemRefIndex].quantity--;
             } else {
 
             }
         } else {
             updatedCartItems.push({ ...item, quantity: 1 });
-            updatedItems[existingItemRefIndex].quantity--;
+            if(updatedItems[existingItemRefIndex].quantity !== -1)
+                updatedItems[existingItemRefIndex].quantity--;
         }
         setCartItems(updatedCartItems);
         setItems(updatedItems);
@@ -36,7 +38,7 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
         MySwal.fire({
             title: `<strong>${item.name} <i>- $${item.price}</strong>`,
             html:`
-                <i class="${(item.quantity === 1 ? "limited-stock" : "")}">${(item.quantity === 1 ? "Only" : "")} ${item.quantity} of this item in stock</i>
+                <i class="stock ${(item.quantity === 1 ? "limited" : "")}">${(item.quantity === -1 ? "Unlimited" : (item.quantity === 1 ? `Only ${item.quantity}` : item.quantity))} of this item in stock</i>
                 <ul>
                     <li>Weight: ${item.weight} lb(s).</li>
                     <li>Size: ${item.size}</li>
@@ -64,24 +66,24 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
           })
     }
 
-    const renderItems = items.sort((a: StoreItem, b: StoreItem) => (a[filter.sort as keyof StoreItem] as number) - (b[filter.sort as keyof StoreItem] as number))
+
+    const renderItems = items
+        .sort((a: StoreItem, b: StoreItem) => (
+            a[filter.sort as keyof StoreItem] === b[filter.sort as keyof StoreItem] ? 0 :
+            a[filter.sort as keyof StoreItem] < b[filter.sort as keyof StoreItem] ? -1 : 1))
         .filter((item: StoreItem) => (filter.type === "all" ? true : item.category === filter.type))
         .filter((item: StoreItem) => item.price <= filter.price)
-        .map((item: StoreItem) => ((item.quantity > 0 ?
-    <div key={item.id} className="item" onClick={() => showItemPopup(item)}>
-    <div className="image">
-        <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)}/>
-    </div>
-    <hr/>
-    <span className="title">{item.name}</span><br/>
-    Price: <span className="price">${item.price}</span><br/>
-    Added: <span className="date">{new Date(item.date*1000).toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: '2-digit',
-        })}</span>
-    </div>
-    : <span key={item.id}></span>)));
+        .map((item: StoreItem) => ((item.quantity !== 0 ?
+            <div key={item.id} className="item" onClick={() => showItemPopup(item)}>
+            <div className="image">
+                <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)}/>
+            </div>
+            <hr/>
+            <span className="title">{item.name}</span><br/>
+            Price: <span className="price">${item.price}</span><br/>
+            Size: <span className="size">{item.size}</span>
+            </div>
+            : <span key={item.id}></span>)));
 
     return (
         <div className="StoreItems">
