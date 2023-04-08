@@ -8,6 +8,15 @@ import { ButtonWrapper } from 'components/PayPal'
 
 import { StoreItem, StoreEstimate, StoreCartProps, StoreEstimateRate } from 'types/Store'
 
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            REACT_APP_PAYPAL_CLIENT_ID: string;
+        }
+    }
+}
+
+
 const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCartItems }) => {
     const [isCheckout, setIsCheckout] = useState<boolean>(false);
     const [estimate, setEstimate] = useState<StoreEstimate>();
@@ -112,7 +121,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
                         {isCheckout ?
                             <PayPalScriptProvider
                                 options={{
-                                    "client-id": "AdM6JkIjifqsGLOGVJ5N3CjAtTnTegXdd8w_jCJhS8x2RlRsfaDS_85a_UkQObCdnsQk9D7rL1xajRxs",
+                                    "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
                                     components: "buttons",
                                     currency: "USD"
                                 }}
