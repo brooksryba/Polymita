@@ -25,9 +25,9 @@ function StoreFront() {
         <section className='Store'>
             <div className='sidebar'>
                 <StoreFilter />
-                <StoreCart cartItems={cartItems} setCartItems={setCartItems}/>
+                <StoreCart cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems}/>
             </div>
-            <StoreItems cartItems={cartItems} setCartItems={setCartItems} items={items}/>
+            <StoreItems cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems}/>
         </section>
     )
 }

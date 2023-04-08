@@ -19,7 +19,7 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean, cartItems: any }> =
                 ...options,
             },
         });
-    }, [showSpinner]);
+    }, [showSpinner, dispatch, options]);
 
 
     return (<>
@@ -35,7 +35,7 @@ export const ButtonWrapper: React.FC<{ showSpinner: boolean, cartItems: any }> =
                         headers: {"Content-Type": "application/json",},
                         body: JSON.stringify({
                             cart: cartItems,
-                            zip: "12345",
+                            zip: "95131",
                             service: "Priority"
                         }),
                     })

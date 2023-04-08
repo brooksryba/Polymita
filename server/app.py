@@ -44,10 +44,12 @@ def teardown_request(exception):
 def estimate():
     origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.args.get("dest"))
-    parcel = Parcel.create(weight=16*int(request.args.get("weight")))
+    parcel = Parcel.create(weight=16*int(float(request.args.get("weight"))))
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
 
-    return [{'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]
+    print(dir(shipment.rates[0]))
+
+    return {"rates":[{'delivery_days': r.delivery_days or 1, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
 
 @app.route('/purchase', methods=['POST'])
 def purchase():
@@ -58,7 +60,7 @@ def purchase():
         product = Product.find(item['id'])
         weight += product.weight
         amount += product.price * item['quantity']
-        products.append({"id": product.id, "quantity": product.quantity})
+        products.append({"id": product.id, "quantity": item['quantity']})
 
     service = request.json.get("service")
     origin = Address.create(zip=ORIGIN_ZIP)
@@ -145,4 +147,4 @@ def create():
     return jsonify(products)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
