@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { StoreFilterProps, defaultStoreFilters } from "types/Store";
 
-const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
+const StoreFilter: React.FC<StoreFilterProps> = ({ active, filter, setFilter }) => {
     const priceRef = useRef<HTMLInputElement>(null);
     const [price, setPrice] = useState(filter.price);
     const [sort, setSort] = useState(filter.sort);
@@ -22,7 +22,7 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ filter, setFilter }) => {
     }
 
     return (
-        <div className="StoreFilter">
+        <div className={active ? "StoreFilter" : "StoreFilter disable"}>
             <span className="material-symbols-outlined">tune</span>
             <h3>Filters:</h3><br />
 

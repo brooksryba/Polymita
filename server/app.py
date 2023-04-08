@@ -62,35 +62,6 @@ def purchase():
         products.append({"id": product.id, "quantity": item['quantity']})
 
     service = request.json.get("service")
-    origin = Address.create(zip=ORIGIN_ZIP)
-    dest = Address.create(zip=request.json.get("zip"))
-    parcel = Parcel.create(weight=16*weight)
-    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
-
-    amount += float([s for s in shipment.rates if s.service == service][0].rate)
-    amount *= PAYPAL_FEE
-
-    order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
-    Order.create(id=order["id"], date=datetime.datetime.now(), products=products, weight=weight, service=service, is_processed=False, is_shipped=False)
-    return order
-
-@app.route('/confirm', methods=['POST'])
-def confirm():
-    order_id = request.json.get("orderID")
-    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=order_id)
-    receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
-    destination = capture['purchase_units'][0]["shipping"]["address"]
-
-    address = ""
-    for key in ["address_line_1", "admin_area_1", "admin_area_2", "country_code", "postal_code"]:
-        address += destination[key] + " "
-
-    order = Order.find(order_id)
-
-    for meta in order.products:
-        product = Product.find(meta['id'])
-        if(product.quantity != -1):
-            product.update(quantity=product.quantity-meta['quantity'])
 
     origin = Address.create(
         name='Brooks Ryba',
@@ -102,15 +73,48 @@ def confirm():
         phone='248-884-9404',
         email='brooksryba@gmail.com')
     dest = Address.create(
-        name=f"{capture['payer']['name']['given_name']} {capture['payer']['name']['surname']}",
-        street1=destination.get("address_line_1"),
-        city=destination.get("admin_area_2"),
-        state=destination.get("admin_area_1"),
-        zip=destination.get("postal_code"),
-        country=destination.get("country_code")
+        name=request.json.get("name"),
+        street1=request.json.get("address_1"),
+        street2=request.json.get("address_2"),
+        city=request.json.get("city"),
+        state=request.json.get("state"),
+        zip=request.json.get("zip"),
+        country=request.json.get("country"),
+        phone=request.json.get("phone"),
+        email=request.json.get("email")
     )
-    parcel = Parcel.create(weight=int(16*order.weight))
+    parcel = Parcel.create(weight=16*weight)
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
+
+    amount += float([s for s in shipment.rates if s.service == service][0].rate)
+    amount *= PAYPAL_FEE
+
+    order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
+    Order.create(id=order["id"],
+                date=datetime.datetime.now(),
+                products=products,
+                weight=weight,
+                service=service,
+                shipment=shipment.id,
+                address=dest.to_dict(),
+                is_processed=False,
+                is_shipped=False)
+    return order
+
+@app.route('/confirm', methods=['POST'])
+def confirm():
+    order_id = request.json.get("orderID")
+    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=order_id)
+    receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
+
+    order = Order.find(order_id)
+
+    for meta in order.products:
+        product = Product.find(meta['id'])
+        if(product.quantity != -1):
+            product.update(quantity=product.quantity-meta['quantity'])
+
+    shipment = Shipment.retrieve(order.shipment)
     shipment.buy(rate=[s for s in shipment.rates if s.service == order.service][0])
 
     order.update(email=capture.get("payer").get("email_address"),
@@ -118,7 +122,6 @@ def confirm():
                 price=receivables["gross_amount"]["value"],
                 net=receivables["net_amount"]["value"],
                 label=[s for s in shipment.rates if s.service == order.service][0].rate,
-                address=address,
                 is_processed=True)
 
     return jsonify(order)

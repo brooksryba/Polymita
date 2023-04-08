@@ -89,6 +89,50 @@ body {
             font-family: 'IBM Plex Serif', serif;
 
             div {
+                &.content {
+                    border: 1px solid #aaa;
+                    border-radius: 6px;
+                    display: inline-block;
+                    vertical-align: top;
+                    box-sizing: border-box;
+                    box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
+                    padding: 20px;
+                }
+
+                &.StoreCheckout {
+                    h2 {
+                        margin: 0px 20px;
+                    }
+                    div.Contact {
+                        label {
+                            display: block;
+                        }
+
+                        input {
+                            display: block;
+                            width: 100%;
+                            height: 30px;
+                            border-radius: 3px;
+                            border: 1px solid #888;
+                            box-sizing: border-box;
+                            padding: 0px 10px;
+                            margin-bottom: 10px;
+
+                            &:focus {
+                                outline: none; /* Remove default focus outline */
+                                border: 1px solid #0060df; /* Add a blue border */
+                                box-shadow: 0 0 5px #0060df88; /* Add a blue box-shadow */
+                            }
+                        }
+                    }
+                    div.Payment {
+                        label {
+                            display: block;
+                            font-weight: bold;
+                        }
+                    }
+                }
+
                 &.StoreFilter {
                     width: 100%;
                     border: 1px solid #aaa;
@@ -96,6 +140,12 @@ body {
                     padding: 20px;
                     box-sizing: border-box;
                     box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
+
+                    &.disable {
+                        opacity: 40%;
+                        pointer-events: none;
+                        user-select: none;
+                    }
 
                     h3 {
                         display: inline-block;
@@ -137,7 +187,6 @@ body {
                     display: inline-block;
                     vertical-align: top;
                     box-sizing: border-box;
-                    margin-top: 20px;
                     margin-bottom: 20px;
                     box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
 
@@ -231,13 +280,6 @@ body {
                 }
 
                 &.StoreItems {
-                    border: 1px solid #aaa;
-                    border-radius: 6px;
-                    display: inline-block;
-                    vertical-align: top;
-                    box-sizing: border-box;
-                    box-shadow: 0px 0px 10px rgba(98, 98, 98, 0.11);
-                    padding: 20px;
 
                     div.item {
                         cursor: pointer;
@@ -360,6 +402,10 @@ div.swal2-popup.swal2-modal {
         font-size: 1.775em;
     }
 
+    img.swal2-image {
+        max-height: 500px;
+    }
+
     i {
         &.stock {
             &.limited {
@@ -404,15 +450,27 @@ div.swal2-popup.swal2-modal {
                     vertical-align: top;
                 }
 
-                &.StoreItems {
+                &.content {
                     width: calc(100% - 250px);
 
-                    div.item {
-                        width: calc(33% - 10px);
+                    div.StoreItems {
+                        div.item {
+                            width: calc(33% - 10px);
 
-                        img {
-                            max-height: 128px;
+                            img {
+                                max-height: 128px;
+                            }
                         }
+                    }
+                }
+
+                &.StoreCheckout {
+                    div.half {
+                        width: 50%;
+                        display: inline-block;
+                        vertical-align: top;
+                        padding: 0px 20px;
+                        box-sizing: border-box;
                     }
                 }
             }

@@ -1,3 +1,22 @@
+export type StoreContact = {
+    name: string;
+    email: string;
+    phone: string;
+    address_1: string;
+    address_2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+}
+
+export type StoreShippingService = {
+    carrier: string;
+    rate: string;
+    service: string;
+    delivery_days: number;
+}
+
 export type StoreItem = {
     id: number;
     name: string;
@@ -22,18 +41,12 @@ export const defaultStoreFilters: StoreFilters = {
     price: 100,
 };
 
-export type StoreEstimateRate = {
-    carrier: string;
-    rate: string;
-    service: string;
-    delivery_days: number;
-}
-
 export type StoreEstimate = {
-    rates: Array<StoreEstimateRate>;
+    rates: Array<StoreShippingService>;
 };
 
 export type StoreFilterProps = {
+    active: boolean;
     filter: StoreFilters;
     setFilter: React.Dispatch<React.SetStateAction<StoreFilters>>;
 }
@@ -47,8 +60,28 @@ export type StoreItemsProps = {
 };
 
 export type StoreCartProps = {
+    isCheckout: boolean;
+    setIsCheckout: React.Dispatch<React.SetStateAction<boolean>>;
     items: Array<StoreItem>;
     setItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
     cartItems: Array<StoreItem>;
     setCartItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
 };
+
+export type StoreCheckoutContactProps = {
+    setContact: React.Dispatch<React.SetStateAction<StoreContact>>;
+}
+
+export type StoreCheckoutShippingProps = {
+    cartItems: Array<StoreItem>;
+    contact: StoreContact | undefined;
+    setShipping: React.Dispatch<React.SetStateAction<StoreShippingService>>;
+}
+
+export type StoreCheckoutPaymentProps = {
+    cartItems: Array<StoreItem>;
+    contact: StoreContact | undefined;
+    shipping: StoreShippingService | undefined;
+    setCartItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
+    setIsCheckout: React.Dispatch<React.SetStateAction<boolean>>;
+}

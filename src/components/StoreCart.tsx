@@ -1,12 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
-import {
-    PayPalScriptProvider,
-} from "@paypal/react-paypal-js";
 
-import { ButtonWrapper } from 'components/PayPal'
-
-import { StoreItem, StoreEstimate, StoreCartProps, StoreEstimateRate } from 'types/Store'
+import { StoreItem, StoreEstimate, StoreCartProps, StoreShippingService } from 'types/Store'
 
 declare global {
     namespace NodeJS {
@@ -17,13 +12,11 @@ declare global {
 }
 
 
-const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCartItems }) => {
-    const [isCheckout, setIsCheckout] = useState<boolean>(false);
+const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items, setItems, cartItems, setCartItems }) => {
     const [estimate, setEstimate] = useState<StoreEstimate>();
     const estimateRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setIsCheckout(false);
         doEstimate();
     }, [cartItems]);
 
@@ -96,13 +89,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
                             </div>
                         </div>
                     ))}
+                    {!isCheckout ? <>
                     <hr />
                     <div className="shipping">
                         <h4>Shipping:</h4>
                         <ul>
                         {(estimate ? estimate.rates
-                                        .sort((a: StoreEstimateRate, b: StoreEstimateRate) => a.delivery_days - b.delivery_days)
-                                        .map((rate: StoreEstimateRate) =>
+                                        .sort((a: StoreShippingService, b: StoreShippingService) => a.delivery_days - b.delivery_days)
+                                        .map((rate: StoreShippingService) =>
                                             <li key={rate.service}>
                                                 ({rate.delivery_days}-{Math.ceil(rate.delivery_days*1.5)} day) {rate.service} - {formatter.format(Number(rate.rate))}
                                             </li>
@@ -118,25 +112,9 @@ const StoreCart: React.FC<StoreCartProps> = ({ items, setItems, cartItems, setCa
                     <div className="subtotal">
                         <h4>Sub-total:</h4>
                         <span>{formatter.format(Number(cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)))}</span>
-                        {isCheckout ?
-                            <PayPalScriptProvider
-                                options={{
-                                    "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
-                                    components: "buttons",
-                                    currency: "USD"
-                                }}
-                            >
-                                <ButtonWrapper
-                                    cartItems={cartItems}
-                                    showSpinner={true}
-                                />
-                            </PayPalScriptProvider>
-                            :
-                            <>
-                                <button onClick={() => doCheckout()}>Checkout</button>
-                            </>
-                        }
+                        <button onClick={() => doCheckout()}>Checkout</button>
                     </div>
+                    </> : <></>}
                 </>
                 :
                 <>

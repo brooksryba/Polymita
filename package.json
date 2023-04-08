@@ -11,6 +11,7 @@
     "react-grid-gallery": "^1.0.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "react-step-wizard": "^5.3.11",
     "sweetalert2": "^11.7.3",
     "sweetalert2-react-content": "^5.0.7",
     "yet-another-react-lightbox": "^3.3.0"
