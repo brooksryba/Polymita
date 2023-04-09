@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { StepWizardChildProps } from "react-step-wizard";
 
 import { StoreCheckoutContactProps } from "types/Store";
+import SweetAlert from 'components/Swal';
 
 
 const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
@@ -16,19 +17,35 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
     const countryRef = useRef<HTMLInputElement>(null);
 
     function doNextStep() {
-        setContact({
-            name: nameRef.current ? nameRef.current.value : "",
-            email: emailRef.current ? emailRef.current.value : "",
-            phone: phoneRef.current ? phoneRef.current.value : "",
-            address_1: address1Ref.current ? address1Ref.current.value : "",
-            address_2: address2Ref.current ? address2Ref.current.value : "",
-            city: cityRef.current ? cityRef.current.value : "",
-            state: stateRef.current ? stateRef.current.value : "",
-            zip: zipRef.current ? zipRef.current.value : "",
-            country: countryRef.current ? countryRef.current.value : "",
-        })
-        if(nextStep)
-            nextStep();
+        if(nameRef.current?.value &&
+           emailRef.current?.value &&
+           phoneRef.current?.value &&
+           address1Ref.current?.value &&
+           cityRef.current?.value &&
+           stateRef.current?.value &&
+           zipRef.current?.value &&
+           countryRef.current?.value) {
+            setContact({
+                name: nameRef.current?.value,
+                email: emailRef.current?.value,
+                phone: phoneRef.current?.value,
+                address_1: address1Ref.current?.value,
+                address_2: (address2Ref.current?.value ? address2Ref.current?.value : ""),
+                city: cityRef.current?.value,
+                state: stateRef.current?.value,
+                zip: zipRef.current?.value,
+                country: countryRef.current?.value,
+            })
+            if(nextStep)
+                nextStep();
+        } else {
+            SweetAlert.fire({
+                icon: 'error',
+                title: 'Please fill in all fields before continuing.',
+                showConfirmButton: false,
+                timer: 1500
+              })
+        }
     }
 
     return (
@@ -57,7 +74,11 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
                 <label>Country:</label>
                 <input ref={countryRef} type='text' />
             </div>
-        <button onClick={doNextStep}>Next Step</button>
+            <div className="buttons">
+                <button className="next" onClick={doNextStep}>
+                    <span className="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
       </div>
     )
 }

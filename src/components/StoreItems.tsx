@@ -1,11 +1,8 @@
 import { StoreItem, StoreItemsProps } from 'types/Store'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import SweetAlert from 'components/Swal';
 
 
 const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartItems, setCartItems }) => {
-    const MySwal = withReactContent(Swal)
-
     function addItemToCart(item: StoreItem) {
         const existingItemIndex = cartItems.findIndex(
             (cartItem) => cartItem.id === item.id
@@ -35,7 +32,7 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
     }
 
     function showItemPopup(item: StoreItem) {
-        MySwal.fire({
+        SweetAlert.fire({
             title: `<strong>${item.name} <i>- $${item.price}</strong>`,
             html:`
                 <i class="stock ${(item.quantity === 1 ? "limited" : "")}">${(item.quantity === -1 ? "Unlimited" : (item.quantity === 1 ? `Only ${item.quantity}` : item.quantity))} of this item in stock</i>
@@ -56,7 +53,7 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
           }).then((result) => {
             if (result.isConfirmed) {
                 addItemToCart(item)
-                MySwal.fire({
+                SweetAlert.fire({
                     icon: 'success',
                     title: 'Item added to the cart',
                     showConfirmButton: false,

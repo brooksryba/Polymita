@@ -1,12 +1,9 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { StepWizardChildProps } from "react-step-wizard";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 
 import { StoreCheckoutPaymentProps } from 'types/Store';
+import SweetAlert from 'components/Swal';
 
-
-const MySwal = withReactContent(Swal)
 const PayPalOptions = {
   "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
   components: "buttons",
@@ -46,7 +43,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
       })
     })
       .then((response) => {
-        MySwal.fire({
+        SweetAlert.fire({
           icon: 'success',
           title: 'Checkout complete',
           timer: 3000
@@ -95,7 +92,11 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
             onApprove={onApprove}
           />
         </PayPalScriptProvider>
-        <button onClick={previousStep}>Previous Step</button>
+      </div>
+      <div className="buttons">
+        <button className='back' onClick={previousStep}>
+            <span className="material-symbols-outlined">arrow_back</span>
+        </button>
       </div>
     </div>
   )

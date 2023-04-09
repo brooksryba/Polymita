@@ -43,6 +43,11 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
                 if(updatedItems[existingItemRefIndex].quantity !== -1)
                     updatedItems[existingItemRefIndex].quantity++;
             }
+
+            if(updatedCartItems.length === 0) {
+                setIsCheckout(false);
+            }
+
             setCartItems(updatedCartItems);
             setItems(updatedItems);
         }
@@ -50,6 +55,10 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
 
     function doCheckout() {
         setIsCheckout(true);
+    }
+
+    function doStore() {
+        setIsCheckout(false);
     }
 
     function doEstimate() {
@@ -78,7 +87,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
             {cartItems.length > 0 ?
                 <>
                     {cartItems.map((item: StoreItem) => (
-                        <div key={item.id} className="item" onClick={() => removeItemFromCart(item)}>
+                        <div key={item.id} className="item" >
                             <div className="image">
                                 <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)} />
                             </div>
@@ -87,6 +96,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
                                 Price: <span className="price">${item.price}</span><br />
                                 Quantity: <span className="date">{item.quantity}</span>
                             </div>
+                            <span onClick={() => removeItemFromCart(item)} className="remove material-symbols-outlined">delete</span>
                         </div>
                     ))}
                     {!isCheckout ? <>
@@ -112,9 +122,11 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
                     <div className="subtotal">
                         <h4>Sub-total:</h4>
                         <span>{formatter.format(Number(cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)))}</span>
-                        <button onClick={() => doCheckout()}>Checkout</button>
                     </div>
-                    </> : <></>}
+                    </> :<>
+                        </>
+                    }
+
                 </>
                 :
                 <>
@@ -123,6 +135,13 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
                 </>
             }
 
+            {!isCheckout ? <>
+                {cartItems.length > 0 ?
+                    <><hr/><button onClick={() => doCheckout()}>Checkout</button></> : <></>
+                }
+            </> : <>
+                <hr/><button onClick={() => doStore()}>Return to Store</button>
+            </>}
         </div>
     )
 }
