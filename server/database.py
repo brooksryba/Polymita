@@ -26,7 +26,6 @@ class BaseExtension:
     def create(cls, *args, **kwargs):
         model = cls(**kwargs)
         g.session.add(model)
-        g.session.commit()
         return model
 
     @classmethod
@@ -40,10 +39,6 @@ class BaseExtension:
     @classmethod
     def filter(cls, func):
         return g.session.query(cls).filter(func(cls)).all()
-
-    @classmethod
-    def save(cls):
-        g.session.commit()
 
     def update(self, **kwargs):
         for key, value in kwargs.items():

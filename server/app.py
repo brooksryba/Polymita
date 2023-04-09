@@ -38,6 +38,7 @@ def before_request():
 def teardown_request(exception):
     session = getattr(g, 'session', None)
     if session is not None:
+        session.commit()
         session.close()
 
 

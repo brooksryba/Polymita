@@ -12,6 +12,15 @@ const PayPalOptions = {
 
 const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWizardChildProps>> = ({ cartItems, contact, shipping, previousStep, setCartItems, setIsCheckout }) => {
 
+  function onError() {
+    SweetAlert.fire({
+      icon: 'error',
+      title: 'Error occurred during checkout. Please try again shortly.',
+      showConfirmButton: false,
+      timer: 3000
+    })
+  }
+
   function createOrder() {
     return fetch("http://localhost:5000/purchase", {
       method: "POST",
@@ -46,12 +55,12 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
         SweetAlert.fire({
           icon: 'success',
           title: 'Checkout complete',
+          showConfirmButton: false,
           timer: 3000
         }).then(() => {
           setCartItems([]);
           setIsCheckout(false);
         })
-
         return response.json()
       });
   }
@@ -90,6 +99,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
             fundingSource={undefined}
             createOrder={createOrder}
             onApprove={onApprove}
+            onError={onError}
           />
         </PayPalScriptProvider>
       </div>
