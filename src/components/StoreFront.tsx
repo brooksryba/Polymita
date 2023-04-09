@@ -22,7 +22,7 @@ function StoreFront() {
   const [userShipping, setUserShipping] = useState<StoreShippingService>();
 
   useEffect(() => {
-    fetch("http://localhost:5000/list")
+    fetch(`${process.env.REACT_APP_BACKEND}/list`)
       .then((response) => response.json())
       .then((data: StoreItem[]) => {
         setItems(data);

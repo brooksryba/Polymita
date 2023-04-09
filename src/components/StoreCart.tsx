@@ -64,7 +64,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
     function doEstimate() {
         if (estimateRef.current && estimateRef.current.value) {
             const weight = cartItems.reduce((total, item) => total + item.weight, 0)
-            fetch(`http://localhost:5000/estimate?dest=${estimateRef.current.value}&weight=${weight}`)
+            fetch(`${process.env.REACT_APP_BACKEND}/estimate?dest=${estimateRef.current.value}&weight=${weight}`)
                 .then((response) => response.json())
                 .then((data: StoreEstimate) => {
                     setEstimate(data);

@@ -22,7 +22,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
   }
 
   function createOrder() {
-    return fetch("http://localhost:5000/purchase", {
+    return fetch(`${process.env.REACT_APP_BACKEND}/purchase`, {
       method: "POST",
       headers: { "Content-Type": "application/json", },
       body: JSON.stringify({
@@ -44,7 +44,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
   }
 
   function onApprove(data: any) {
-    return fetch("http://localhost:5000/confirm", {
+    return fetch(`${process.env.REACT_APP_BACKEND}/confirm`, {
       method: "POST",
       headers: { "Content-Type": "application/json", },
       body: JSON.stringify({

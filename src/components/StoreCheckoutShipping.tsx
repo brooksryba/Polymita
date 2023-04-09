@@ -20,7 +20,7 @@ const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepW
     setEstimate(undefined);
     setSelection(undefined);
     const weight = cartItems.reduce((total, item) => total + (item.weight * item.quantity), 0)
-    fetch(`http://localhost:5000/estimate?dest=${contact.zip}&weight=${weight}`)
+    fetch(`${process.env.REACT_APP_BACKEND}/estimate?dest=${contact.zip}&weight=${weight}`)
       .then((response) => response.json())
       .then((data: StoreEstimate) => {
         setEstimate(data);
