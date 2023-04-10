@@ -62,7 +62,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
       });
   }
 
-  function onApprove(data: any, actions: any) {
+  function onApprove(data: any) {
     return fetch(`${process.env.REACT_APP_BACKEND}/confirm`, {
       method: "POST",
       headers: { "Content-Type": "application/json", },
