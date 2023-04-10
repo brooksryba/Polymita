@@ -4,6 +4,14 @@ import { StepWizardChildProps } from "react-step-wizard";
 import { StoreCheckoutPaymentProps } from 'types/Store';
 import SweetAlert from 'components/Swal';
 
+declare global {
+  namespace NodeJS {
+      interface ProcessEnv {
+          REACT_APP_PAYPAL_CLIENT_ID: string;
+      }
+  }
+}
+
 const PayPalOptions = {
   "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
   components: "buttons",
@@ -11,14 +19,18 @@ const PayPalOptions = {
 };
 
 const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWizardChildProps>> = ({ cartItems, contact, shipping, previousStep, setCartItems, setIsCheckout }) => {
+  let errorResponse = {'error': undefined};
 
-  function onError() {
+  function onError(err:any) {
+    console.log(err)
     SweetAlert.fire({
       icon: 'error',
-      title: 'Error occurred during checkout. Please try again shortly.',
+      title: (errorResponse.error ? `An error occurred:<br>${errorResponse.error}` : 'Error occurred during checkout. Please try again shortly.'),
       showConfirmButton: false,
-      timer: 3000
-    })
+      timer: 5000
+    }).then(() =>
+      errorResponse.error = undefined
+    )
   }
 
   function createOrder() {
@@ -39,11 +51,17 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
         service: shipping?.service
       }),
     })
-      .then((response) => response.json())
-      .then((order) => order.id);
+      .then((response) => {
+        return response.json()
+      })
+      .then((order) => {
+        if(order.error)
+          errorResponse.error = order.error
+        return order.id
+      });
   }
 
-  function onApprove(data: any) {
+  function onApprove(data: any, actions: any) {
     return fetch(`${process.env.REACT_APP_BACKEND}/confirm`, {
       method: "POST",
       headers: { "Content-Type": "application/json", },
@@ -62,6 +80,10 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
           setIsCheckout(false);
         })
         return response.json()
+      }).then(function(captureData) {
+        if (captureData.error === 'INSTRUMENT_DECLINED') { // Your server response structure and key names are what you choose
+          return actions.restart();
+        }
       });
   }
 
@@ -90,7 +112,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
         <label>Shipping: {formatter.format(Number(shipping?.rate))}</label>
         <label>Tax & Fees: {formatter.format((cartTotal+Number(shipping?.rate))*0.0299)}</label>
         <hr/>
-        <label>Total: {formatter.format((cartTotal+Number(shipping?.rate))*1.0299)}</label>
+        <label>Total: {formatter.format(((cartTotal+Number(shipping?.rate))*1.0299*1.0299)+0.30)}</label>
         <br/>
         <PayPalScriptProvider options={PayPalOptions}>
           <PayPalButtons

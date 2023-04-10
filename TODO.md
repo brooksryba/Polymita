@@ -1,7 +1,9 @@
 # TODO
 
+## Bugs
+
 ## Concepts
-- Error handling on API
+- Use automatic address form
 
 ## Pages
 

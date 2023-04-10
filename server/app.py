@@ -4,7 +4,7 @@ import paypalrestsdk
 import easypost
 from random import randint
 from easypost import Address, Parcel, Shipment
-from flask import Flask, request, g, jsonify
+from flask import Flask, request, g, jsonify, make_response
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -13,6 +13,7 @@ from database import Product, Order, Session, SQLAlchemyEncoder
 
 load_dotenv()
 PAYPAL_FEE = 1.0299
+PAYPAL_COST = 0.30
 PAYPAL_CLIENT_ID = os.environ.get("PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
@@ -29,6 +30,8 @@ paypalrestsdk.configure({
     "client_secret": PAYPAL_CLIENT_SECRET
 })
 
+def json_error(message):
+    return make_response(jsonify({"error": message}), 400)
 
 @app.before_request
 def before_request():
@@ -56,39 +59,46 @@ def purchase():
     weight = float(0.0)
     amount = float(0.0)
     products = []
+
     for item in request.json.get("cart"):
         product = Product.find(item['id'])
+        if(product is None):
+            return json_error(f"One or more products in the cart is no longer available.")
+        if(product.quantity != -1 and product.quantity < item['quantity']):
+            return json_error(f"{product.name} is no longer available.")
         weight += product.weight
         amount += product.price * item['quantity']
         products.append({"id": product.id, "quantity": item['quantity']})
 
     service = request.json.get("service")
 
-    origin = Address.create(
-        name='Brooks Ryba',
-        street1='1601 Elijah Ln',
-        city='Howell',
-        state='MI',
-        zip='48843',
-        country='US',
-        phone='248-884-9404',
-        email='brooksryba@gmail.com')
-    dest = Address.create(
-        name=request.json.get("name"),
-        street1=request.json.get("address_1"),
-        street2=request.json.get("address_2"),
-        city=request.json.get("city"),
-        state=request.json.get("state"),
-        zip=request.json.get("zip"),
-        country=request.json.get("country"),
-        phone=request.json.get("phone"),
-        email=request.json.get("email")
-    )
+    origin = Address.retrieve("adr_07a0d7d1d73e11ed8ad7ac1f6bc72124")
+
+    try:
+        dest = Address.create(
+            name=request.json.get("name"),
+            street1=request.json.get("address_1"),
+            street2=request.json.get("address_2"),
+            city=request.json.get("city"),
+            state=request.json.get("state"),
+            zip=request.json.get("zip"),
+            country=request.json.get("country"),
+            phone=request.json.get("phone"),
+            email=request.json.get("email")
+        )
+
+        resp = dest.verify()
+        if not resp.verifications.delivery.success:
+            return json_error('. '.join(resp.verifications.delivery.errors) + ".")
+    except easypost.error.Error as e:
+        return json_error(f"Shipping address is invalid ({e}).")
     parcel = Parcel.create(weight=16*weight)
     shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
 
     amount += float([s for s in shipment.rates if s.service == service][0].rate)
     amount *= PAYPAL_FEE
+    amount *= PAYPAL_FEE
+    amount += PAYPAL_COST
 
     order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
     Order.create(id=order["id"],
@@ -112,17 +122,23 @@ def confirm():
 
     for meta in order.products:
         product = Product.find(meta['id'])
-        if(product.quantity != -1):
+        if(product.quantity == 0):
+            return json_error(f"{product.name} is no longer available.")
+        elif(product.quantity != -1):
             product.update(quantity=product.quantity-meta['quantity'])
 
-    shipment = Shipment.retrieve(order.shipment)
-    shipment.buy(rate=[s for s in shipment.rates if s.service == order.service][0])
+    try:
+        shipment = Shipment.retrieve(order.shipment)
+        rate = [s for s in shipment.rates if s.service == order.service][0]
+        shipment.buy(rate=rate)
+    except:
+        return json_error(f"Shipping rate no longer available.")
 
     order.update(email=capture.get("payer").get("email_address"),
                 fee=receivables["paypal_fee"]["value"],
                 price=receivables["gross_amount"]["value"],
                 net=receivables["net_amount"]["value"],
-                label=[s for s in shipment.rates if s.service == order.service][0].rate,
+                label=rate.rate,
                 is_processed=True)
 
     return jsonify(order)
