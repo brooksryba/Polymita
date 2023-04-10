@@ -3,17 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "css-loader": "^6.7.3",
-    "node-sass": "^7.0.3",
-    "sass-loader": "^13.2.2",
-    "emailjs": "^4.0.1",
     "@emailjs/browser": "^3.10.0",
     "@paypal/react-paypal-js": "^7.8.3",
     "@react-google-maps/api": "^2.18.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/webpack-env": "^1.18.0",
     "cra-template": "1.2.0",
+    "css-loader": "^6.7.3",
+    "emailjs": "^4.0.1",
+    "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-grid-gallery": "^1.0.0",
@@ -21,6 +20,8 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-step-wizard": "^5.3.11",
+    "sass-loader": "^13.2.2",
+    "serve": "^14.2.0",
     "sweetalert2": "^11.7.3",
     "sweetalert2-react-content": "^5.0.7",
     "yet-another-react-lightbox": "^3.3.0"
@@ -49,7 +50,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
   }
 }

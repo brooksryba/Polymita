@@ -152,7 +152,7 @@ def list_all():
 @app.route('/fixtures', methods=['GET'])
 def create():
     products = []
-    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=0.2, size='8" x 10"',))
+    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=5.00, weight=0.2, size='8" x 10"',))
     products.append(Product.create(category='pottery', quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=10.00, weight=1.5, size='12 fl oz',))
     products.append(Product.create(category='pottery', quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=20.00, weight=1.5, size='12 fl oz',))
     products.append(Product.create(category='pottery', quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=30.00, weight=1.5, size='12 fl oz',))
