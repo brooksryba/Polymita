@@ -74,6 +74,7 @@ class Order(Base, BaseExtension):
     price = Column(Float)
     net = Column(Float)
     label = Column(Float)
+    tracker = Column(String)
     service = Column(String)
     products = Column(JSON)
     weight = Column(Float)

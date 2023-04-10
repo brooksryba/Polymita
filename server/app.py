@@ -123,7 +123,7 @@ def confirm():
     try:
         shipment = Shipment.retrieve(order.shipment)
         rate = [s for s in shipment.rates if s.service == order.service][0]
-        shipment.buy(rate=rate)
+        label = shipment.buy(rate=rate)
     except:
         return json_error(f"Shipping rate no longer available.")
 
@@ -132,6 +132,7 @@ def confirm():
                 price=receivables["gross_amount"]["value"],
                 net=receivables["net_amount"]["value"],
                 label=rate.rate,
+                tracker=label["tracker"]["public_url"],
                 is_processed=True)
 
     return jsonify(order)

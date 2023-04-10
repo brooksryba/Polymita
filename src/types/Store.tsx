@@ -1,4 +1,5 @@
 export type StoreContact = {
+    username: string;
     name: string;
     email: string;
     phone: string;

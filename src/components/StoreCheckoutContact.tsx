@@ -6,6 +6,7 @@ import { StoreCheckoutContactProps } from "types/Store";
 import SweetAlert from 'components/Swal';
 
 const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
+    const usernameRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const phoneRef = useRef<HTMLInputElement>(null);
@@ -48,7 +49,8 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
 
 
     function doNextStep() {
-        if(nameRef.current?.value &&
+        if(usernameRef.current?.value &&
+           nameRef.current?.value &&
            emailRef.current?.value &&
            phoneRef.current?.value &&
            address1Ref &&
@@ -57,6 +59,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
            zipRef &&
            countryRef) {
             setContact({
+                username: usernameRef.current?.value,
                 name: nameRef.current?.value,
                 email: emailRef.current?.value,
                 phone: phoneRef.current?.value,
@@ -84,6 +87,8 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
         <div className='Contact'>
             <div className="half">
                 <h3><span className="material-symbols-outlined">contacts</span>Contact Information:</h3>
+                <label>Name:</label>
+                <input ref={usernameRef} name='username' type='name' autoComplete="name"/>
                 <label>E-mail:</label>
                 <input ref={emailRef} name='email' type='email' autoComplete="email"/>
                 <label>Phone:</label>
@@ -92,7 +97,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
             <div className="half">
                 <h3><span className="material-symbols-outlined">home</span>Shipping Address:</h3>
                 <label>Name:</label>
-                <input ref={nameRef} type='text' autoComplete="name"/>
+                <input ref={nameRef} type='text'/>
                 <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                     <>
                         <label>Address:</label>

@@ -1,5 +1,6 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { StepWizardChildProps } from "react-step-wizard";
+import emailjs from '@emailjs/browser';
 
 import { StoreCheckoutPaymentProps } from 'types/Store';
 import SweetAlert from 'components/Swal';
@@ -79,11 +80,14 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
           setCartItems([]);
           setIsCheckout(false);
         })
+
         return response.json()
       }).then(function(captureData) {
-        if (captureData.error === 'INSTRUMENT_DECLINED') { // Your server response structure and key names are what you choose
-          return actions.restart();
-        }
+        emailjs.send('service_f93v6k2', 'template_0jy2vhm', {
+          "user_email": contact?.email,
+          "user_name": contact?.username,
+          "tracking_url": captureData.tracker
+        }, 'fsNy-2mIY3UcPyt1_')
       });
   }
 
