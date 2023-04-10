@@ -3,7 +3,6 @@
 ## Bugs
 
 ## Concepts
-- Use automatic address form
 
 ## Pages
 

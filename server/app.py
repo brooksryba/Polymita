@@ -11,19 +11,20 @@ from dotenv import load_dotenv
 from paypal import PayPal
 from database import Product, Order, Session, SQLAlchemyEncoder
 
-load_dotenv()
+load_dotenv(dotenv_path="../.env")
 PAYPAL_FEE = 1.0299
 PAYPAL_COST = 0.30
-PAYPAL_CLIENT_ID = os.environ.get("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_ID = os.environ.get("REACT_APP_PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
-ORIGIN_ZIP = os.environ.get("ORIGIN_ZIP")
 
 app = Flask(__name__)
 app.json_encoder = SQLAlchemyEncoder
 CORS(app)
 
 easypost.api_key = EASYPOST_API_KEY
+ORIGIN_ADDRESS = Address.retrieve("adr_07a0d7d1d73e11ed8ad7ac1f6bc72124")
+
 paypalrestsdk.configure({
     "mode": "sandbox", # or "live" for production
     "client_id": PAYPAL_CLIENT_ID,
@@ -47,10 +48,9 @@ def teardown_request(exception):
 
 @app.route('/estimate', methods=['GET'])
 def estimate():
-    origin = Address.create(zip=ORIGIN_ZIP)
     dest = Address.create(zip=request.args.get("dest"))
     parcel = Parcel.create(weight=16*float(request.args.get("weight")))
-    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
+    shipment = Shipment.create(to_address=dest, from_address=ORIGIN_ADDRESS, parcel=parcel)
 
     return {"rates":[{'delivery_days': r.delivery_days or 1, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
 
@@ -72,8 +72,6 @@ def purchase():
 
     service = request.json.get("service")
 
-    origin = Address.retrieve("adr_07a0d7d1d73e11ed8ad7ac1f6bc72124")
-
     try:
         dest = Address.create(
             name=request.json.get("name"),
@@ -93,7 +91,7 @@ def purchase():
     except easypost.error.Error as e:
         return json_error(f"Shipping address is invalid ({e}).")
     parcel = Parcel.create(weight=16*weight)
-    shipment = Shipment.create(to_address=dest, from_address=origin, parcel=parcel)
+    shipment = Shipment.create(to_address=dest, from_address=ORIGIN_ADDRESS, parcel=parcel)
 
     amount += float([s for s in shipment.rates if s.service == service][0].rate)
     amount *= PAYPAL_FEE
