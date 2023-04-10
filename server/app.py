@@ -17,13 +17,14 @@ PAYPAL_COST = 0.30
 PAYPAL_CLIENT_ID = os.environ.get("REACT_APP_PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
+EASYPOST_ADDRESS_ID = os.environ.get("EASYPOST_ADDRESS_ID")
 
 app = Flask(__name__)
 app.json_encoder = SQLAlchemyEncoder
 CORS(app)
 
 easypost.api_key = EASYPOST_API_KEY
-ORIGIN_ADDRESS = Address.retrieve("adr_07a0d7d1d73e11ed8ad7ac1f6bc72124")
+ORIGIN_ADDRESS = Address.retrieve(EASYPOST_ADDRESS_ID)
 
 paypalrestsdk.configure({
     "mode": "sandbox", # or "live" for production
