@@ -71,9 +71,14 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
       })
     })
       .then((response) => {
+        return response.json()
+      }).then(function(order) {
+        if(order.error)
+          errorResponse.error = order.error
+
         SweetAlert.fire({
           icon: 'success',
-          title: 'Checkout complete',
+          title: 'Your order has been placed!',
           showConfirmButton: false,
           timer: 3000
         }).then(() => {
@@ -81,12 +86,10 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
           setIsCheckout(false);
         })
 
-        return response.json()
-      }).then(function(captureData) {
         emailjs.send('service_f93v6k2', 'template_0jy2vhm', {
           "user_email": contact?.email,
           "user_name": contact?.username,
-          "tracking_url": captureData.tracker
+          "tracking_url": order.tracker
         }, 'fsNy-2mIY3UcPyt1_')
       });
   }
@@ -103,12 +106,14 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
       <div className="half">
         <h4><span className="material-symbols-outlined">preview</span>Review:</h4>
         <label>Contact:</label>
+        Name: {contact?.username}<br/>
         E-mail: {contact?.email}<br/>
         Phone: {contact?.phone}<br/><br/>
 
         <label>Shipping Address:</label>
-        {contact?.name}<br/>{contact?.address_1} {contact?.address_2}<br/>{contact?.city}, {contact?.state} {contact?.zip} {contact?.country}
-
+        {contact?.name}<br/>
+        {contact?.address_1} {contact?.address_2}<br/>
+        {contact?.city}, {contact?.state} {contact?.zip} {contact?.country}
       </div>
       <div className="half">
         <h4><span className="material-symbols-outlined">payments</span>Payment:</h4>
