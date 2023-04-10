@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "css-loader": "^6.7.3",
+    "node-sass": "^7.0.3",
+    "sass-loader": "^13.2.2",
+    "emailjs": "^4.0.1",
+    "@emailjs/browser": "^3.10.0",
     "@paypal/react-paypal-js": "^7.8.3",
     "@react-google-maps/api": "^2.18.1",
     "@types/webpack-env": "^1.18.0",
@@ -44,12 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@emailjs/browser": "^3.10.0",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "css-loader": "^6.7.3",
-    "emailjs": "^4.0.1",
-    "node-sass": "^7.0.3",
-    "sass-loader": "^13.2.2"
+    "@testing-library/react": "^14.0.0"
   }
 }
