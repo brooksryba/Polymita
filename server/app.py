@@ -108,9 +108,6 @@ def purchase():
 @app.route('/confirm', methods=['POST'])
 def confirm():
     order_id = request.json.get("orderID")
-    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE).capture_payment(order_id=order_id)
-    receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
-
     order = Order.find(order_id)
 
     for meta in order.products:
@@ -125,8 +122,10 @@ def confirm():
         rate = [s for s in shipment.rates if s.service == order.service][0]
         label = shipment.buy(rate=rate)
     except:
-        return json_error(f"Shipping rate no longer available.")
+        return json_error(f"Could not process shipping label.")
 
+    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE).capture_payment(order_id=order_id)
+    receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
     order.update(email=capture.get("payer").get("email_address"),
                 fee=receivables["paypal_fee"]["value"],
                 price=receivables["gross_amount"]["value"],

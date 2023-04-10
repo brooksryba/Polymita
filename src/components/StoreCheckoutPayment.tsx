@@ -73,24 +73,26 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
       .then((response) => {
         return response.json()
       }).then(function(order) {
-        if(order.error)
+        if(order.error) {
           errorResponse.error = order.error
+          onError(order.error)
+        } else {
+          SweetAlert.fire({
+            icon: 'success',
+            title: 'Your order has been placed!',
+            showConfirmButton: false,
+            timer: 3000
+          }).then(() => {
+            setCartItems([]);
+            setIsCheckout(false);
+          })
 
-        SweetAlert.fire({
-          icon: 'success',
-          title: 'Your order has been placed!',
-          showConfirmButton: false,
-          timer: 3000
-        }).then(() => {
-          setCartItems([]);
-          setIsCheckout(false);
-        })
-
-        emailjs.send('service_f93v6k2', 'template_0jy2vhm', {
-          "user_email": contact?.email,
-          "user_name": contact?.username,
-          "tracking_url": order.tracker
-        }, 'fsNy-2mIY3UcPyt1_')
+          emailjs.send('service_f93v6k2', 'template_0jy2vhm', {
+            "user_email": contact?.email,
+            "user_name": contact?.username,
+            "tracking_url": order.tracker
+          }, 'fsNy-2mIY3UcPyt1_')
+        }
       });
   }
 
