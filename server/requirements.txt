@@ -3,6 +3,5 @@ gunicorn
 requests
 easypost
 sqlalchemy
-paypalrestsdk
 flask_cors
 python-dotenv

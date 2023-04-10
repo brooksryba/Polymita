@@ -1,6 +1,5 @@
 import os
 import datetime
-import paypalrestsdk
 import easypost
 from random import randint
 from easypost import Address, Parcel, Shipment
@@ -16,6 +15,7 @@ PAYPAL_FEE = 1.0299
 PAYPAL_COST = 0.30
 PAYPAL_CLIENT_ID = os.environ.get("REACT_APP_PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
+PAYPAL_MODE = os.environ.get("PAYPAL_MODE")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
 EASYPOST_ADDRESS_ID = os.environ.get("EASYPOST_ADDRESS_ID")
 
@@ -25,12 +25,6 @@ CORS(app)
 
 easypost.api_key = EASYPOST_API_KEY
 ORIGIN_ADDRESS = Address.retrieve(EASYPOST_ADDRESS_ID)
-
-paypalrestsdk.configure({
-    "mode": "sandbox", # or "live" for production
-    "client_id": PAYPAL_CLIENT_ID,
-    "client_secret": PAYPAL_CLIENT_SECRET
-})
 
 def json_error(message):
     return make_response(jsonify({"error": message}), 400)
@@ -99,7 +93,7 @@ def purchase():
     amount *= PAYPAL_FEE
     amount += PAYPAL_COST
 
-    order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).create_order(amount=round(amount, 2))
+    order = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE).create_order(amount=round(amount, 2))
     Order.create(id=order["id"],
                 date=datetime.datetime.now(),
                 products=products,
@@ -114,7 +108,7 @@ def purchase():
 @app.route('/confirm', methods=['POST'])
 def confirm():
     order_id = request.json.get("orderID")
-    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET).capture_payment(order_id=order_id)
+    capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE).capture_payment(order_id=order_id)
     receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
 
     order = Order.find(order_id)
