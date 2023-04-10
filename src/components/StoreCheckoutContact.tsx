@@ -87,7 +87,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
                 <label>E-mail:</label>
                 <input ref={emailRef} name='email' type='email' autoComplete="email"/>
                 <label>Phone:</label>
-                <input ref={phoneRef} name='phone' type='text' autoComplete="phone"/>
+                <input ref={phoneRef} name='phone' type='tel' autoComplete="tel"/>
             </div>
             <div className="half">
                 <h3><span className="material-symbols-outlined">home</span>Shipping Address:</h3>
