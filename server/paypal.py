@@ -8,7 +8,7 @@ class PayPal:
         self.baseURL = {
             "sandbox": "https://api-m.sandbox.paypal.com",
             "live": "https://api-m.paypal.com"
-        }[mode]
+        }[client_mode]
 
     def create_order(self, amount):
         access_token = self.generate_access_token()

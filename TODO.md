@@ -1,6 +1,7 @@
 # TODO
 
 ## Bugs
+- Use static images for products and gallery
 
 ## Concepts
 
