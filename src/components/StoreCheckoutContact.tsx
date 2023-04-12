@@ -40,14 +40,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
                 <Input label="Name:" name='name' type='text' value={form.name} onChange={(e:any) => onUpdate(e, "name")}/>
                 <Optional condition={isLoaded}>
                     <Autocomplete onPlaceChanged={() => handleAddressAutofill(searchResult, form)} onLoad={onLoad}>
-                        <>
-                            <label>Address:</label>
-                            <input
-                                type="text"
-                                placeholder="Search for address"
-                                autoComplete="address"
-                            />
-                        </>
+                        <Input label="Address:" name='address' type='text'/>
                     </Autocomplete>
                 </Optional>
             </div>
