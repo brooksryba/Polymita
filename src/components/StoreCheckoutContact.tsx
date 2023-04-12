@@ -1,120 +1,60 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { StepWizardChildProps } from "react-step-wizard";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
-import { StoreCheckoutContactProps } from "types/Store";
-import SweetAlert from 'components/Swal';
-import MaterialButton from "./MaterialButton";
+import { StoreCheckoutContactProps, StoreContact, defaultStoreContact } from "types/Store";
+import { Optional, Heading, Input, MaterialButton } from "components/Base";
+
+import { handleAddressAutofill, handleContactNextStep } from "functions/Checkout";
+
+const apiKey:string = process.env.REACT_APP_GOOGLE_KEY || "";
+const libraries:("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
+
+interface Dictionary {
+    [key: string]: string;
+}
+
 
 const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
-    const usernameRef = useRef<HTMLInputElement>(null);
-    const nameRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
-    const phoneRef = useRef<HTMLInputElement>(null);
-    const addressRef = useRef<HTMLInputElement>(null);
-    const [address0Ref, setAddress0Ref] = useState("");
-    const [address1Ref, setAddress1Ref] = useState("");
-    const [address2Ref, setAddress2Ref] = useState("");
-    const [cityRef, setCityRef] = useState("");
-    const [stateRef, setStateRef] = useState("");
-    const [zipRef, setZipRef] = useState("");
-    const [countryRef, setCountryRef] = useState("");
-
+    const [contactInfo, setContactInfo] = useState<StoreContact>(defaultStoreContact);
     const [searchResult, setSearchResult] = useState<google.maps.places.Autocomplete>();
+    const { isLoaded } = useLoadScript({googleMapsApiKey: apiKey, libraries: libraries});
 
-    const { isLoaded } = useLoadScript({
-      googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY || "",
-      libraries: ["places"]
-    });
-
-    function onLoad(autocomplete:google.maps.places.Autocomplete) {
-      setSearchResult(autocomplete);
+    function onLoad(autocomplete: google.maps.places.Autocomplete) { setSearchResult(autocomplete); }
+    function onUpdate(event: React.ChangeEvent<HTMLInputElement>, field: string) {
+        const values:Dictionary = {};
+        values[field] = event.target.value;
+        setContactInfo({...contactInfo, ...values})
     }
 
-    function onPlaceChanged() {
-      if (searchResult != null) {
-        const place = searchResult.getPlace();
-        place?.address_components?.forEach((component) => {
-            const types = component.types;
-
-            if (types.includes('street_number')) { setAddress0Ref(component.long_name); }
-            if (types.includes('route')) { setAddress1Ref(component.long_name); }
-            if (types.includes('sublocality_level_1')) { setAddress2Ref(component.long_name); }
-            if (types.includes('locality')) { setCityRef(component.long_name); }
-            if (types.includes('administrative_area_level_1')) { setStateRef(component.short_name); }
-            if (types.includes('postal_code')) { setZipRef(component.long_name); }
-            if (types.includes('country') || types.includes('political')) { setCountryRef(component.short_name); }
-          });
-      }
-    }
-
-
-    function doNextStep() {
-        if(usernameRef.current?.value &&
-           nameRef.current?.value &&
-           emailRef.current?.value &&
-           phoneRef.current?.value &&
-           address1Ref &&
-           cityRef &&
-           stateRef &&
-           zipRef &&
-           countryRef) {
-            setContact({
-                username: usernameRef.current?.value,
-                name: nameRef.current?.value,
-                email: emailRef.current?.value,
-                phone: phoneRef.current?.value,
-                address_1: address0Ref + ' ' + address1Ref,
-                address_2: address2Ref,
-                city: cityRef,
-                state: stateRef,
-                zip: zipRef,
-                country: countryRef,
-            })
-            if(nextStep)
-                nextStep();
-        } else {
-            SweetAlert.fire({
-                icon: 'error',
-                title: 'Please fill in all fields before continuing.',
-                showConfirmButton: false,
-                timer: 1500
-              })
-        }
-    }
-
-    if (!isLoaded) { return <></>; }
     return (
         <div className='Contact'>
             <div className="half">
-                <h3><span className="material-symbols-outlined">contacts</span>Contact Information:</h3>
-                <label>Name:</label>
-                <input ref={usernameRef} name='username' type='name' autoComplete="name"/>
-                <label>E-mail:</label>
-                <input ref={emailRef} name='email' type='email' autoComplete="email"/>
-                <label>Phone:</label>
-                <input ref={phoneRef} name='phone' type='tel' autoComplete="tel"/>
+                <Heading icon="contacts" level={3}>Contact Information:</Heading>
+                <Input label="Name:" name='username' type='text' autoComplete="name" value={contactInfo.username} onChange={(e:any) => onUpdate(e, "username")} />
+                <Input label="E-mail:" name='email' type='email' autoComplete="email" value={contactInfo.email} onChange={(e:any) => onUpdate(e, "email")} />
+                <Input label="Phone:" name='phone' type='tel' autoComplete="tel" value={contactInfo.phone} onChange={(e:any) => onUpdate(e, "phone")} />
             </div>
             <div className="half">
-                <h3><span className="material-symbols-outlined">home</span>Shipping Address:</h3>
-                <label>Name:</label>
-                <input ref={nameRef} type='text'/>
-                <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
-                    <>
-                        <label>Address:</label>
-                        <input
-                            ref={addressRef}
-                            type="text"
-                            placeholder="Search for address"
-                            autoComplete="address"
-                        />
-                    </>
-                </Autocomplete>
+                <Heading icon="home" level={3}>Shipping Address:</Heading>
+                <Input label="Name:" name='name' type='text' value={contactInfo.name} onChange={(e:any) => onUpdate(e, "name")}/>
+                <Optional condition={isLoaded}>
+                    <Autocomplete onPlaceChanged={() => handleAddressAutofill(searchResult, contactInfo)} onLoad={onLoad}>
+                        <>
+                            <label>Address:</label>
+                            <input
+                                type="text"
+                                placeholder="Search for address"
+                                autoComplete="address"
+                            />
+                        </>
+                    </Autocomplete>
+                </Optional>
             </div>
             <div className="buttons">
-                <MaterialButton className="next" onClick={doNextStep} name="arrow_forward"/>
+                <MaterialButton className="next" onClick={() => handleContactNextStep(contactInfo, setContact, nextStep)} name="arrow_forward" />
             </div>
-      </div>
+        </div>
     )
 }
 

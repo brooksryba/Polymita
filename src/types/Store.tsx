@@ -8,6 +8,7 @@ export type StoreContact = {
     name: string;
     email: string;
     phone: string;
+    address_0: string;
     address_1: string;
     address_2: string;
     city: string;
@@ -15,6 +16,31 @@ export type StoreContact = {
     zip: string;
     country: string;
 }
+
+export const defaultStoreContact = {
+    username: "",
+    name: "",
+    email: "",
+    phone: "",
+    address_0: "",
+    address_1: "",
+    address_2: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+}
+
+export const defaultStoreAddress = {
+    address_0: "",
+    address_1: "",
+    address_2: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+}
+
 
 export type StoreShippingService = {
     carrier: string;

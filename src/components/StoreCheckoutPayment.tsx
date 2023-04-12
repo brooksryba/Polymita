@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 
 import { StoreCheckoutPaymentProps } from 'types/Store';
 import SweetAlert from 'components/Swal';
-import MaterialButton from "components/MaterialButton";
+import { MaterialButton } from "components/Base";
 
 declare global {
   namespace NodeJS {
@@ -44,7 +44,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
         name: contact?.name,
         email: contact?.email,
         phone: contact?.phone,
-        address_1: contact?.address_1,
+        address_1: contact?.address_0 + ' ' + contact?.address_1,
         address_2: contact?.address_2,
         city: contact?.city,
         state: contact?.state,
@@ -115,7 +115,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
 
         <label>Shipping Address:</label>
         {contact?.name}<br/>
-        {contact?.address_1} {contact?.address_2}<br/>
+        {contact?.address_0} {contact?.address_1} {contact?.address_2}<br/>
         {contact?.city}, {contact?.state} {contact?.zip} {contact?.country}
       </div>
       <div className="half">

@@ -4,7 +4,7 @@ import { Oval } from 'react-loader-spinner';
 
 import { StoreShippingService, StoreEstimate, StoreCheckoutShippingProps } from "types/Store";
 import SweetAlert from 'components/Swal';
-import MaterialButton from "components/MaterialButton";
+import { MaterialButton } from "components/Base";
 
 
 const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepWizardChildProps>> = ({ cartItems, contact, setShipping, nextStep, previousStep }) => {
@@ -16,6 +16,7 @@ const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepW
   })
 
   useEffect(() => {
+    console.log("Effect")
     if(!contact)
       return
     setEstimate(undefined);
@@ -29,7 +30,7 @@ const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepW
       .catch((error) => {
           console.error("Error fetching data:", error);
       });
-  }, [contact]);
+  }, [contact?.zip, cartItems]);
 
   function doSetShipping() {
     if(!estimate)
