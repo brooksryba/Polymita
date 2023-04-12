@@ -65,12 +65,14 @@ export const MaterialIcon: FC<MaterialIconProps> = ({ name, onClick }) => {
 interface MaterialButtonProps {
     name: string,
     onClick: Function | undefined,
-    className: string,
+    className?: string,
+    children?: ReactNode | undefined;
 }
 
-export const MaterialButton: FC<MaterialButtonProps> = ({ name, onClick, className }) => {
+export const MaterialButton: FC<MaterialButtonProps> = ({ name, onClick, className, children }) => {
     return (
         <button className={className} onClick={() => onClick ? onClick() : null}>
+            {children ? <div>{children}</div> : null}
             <MaterialIcon name={name} />
         </button>
     );

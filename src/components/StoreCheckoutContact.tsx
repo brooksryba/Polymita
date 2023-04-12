@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StepWizardChildProps } from "react-step-wizard";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
-import { StoreCheckoutContactProps, StoreContact, defaultStoreContact } from "types/Store";
+import { StoreContext, StoreContact, defaultStoreContact } from "types/Store";
 import { Optional, Heading, Input, MaterialButton } from "components/Base";
 
 import { handleAddressAutofill, handleContactNextStep } from "functions/Checkout";
@@ -15,7 +15,8 @@ interface Dictionary {
 }
 
 
-const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
+const StoreCheckoutContact: React.FC<Partial<StepWizardChildProps>> = ({ nextStep }) => {
+    const { setContact } = useContext(StoreContext);
     const [form, setForm] = useState<StoreContact>(defaultStoreContact);
     const [searchResult, setSearchResult] = useState<google.maps.places.Autocomplete>();
     const { isLoaded } = useLoadScript({googleMapsApiKey: apiKey, libraries: libraries});

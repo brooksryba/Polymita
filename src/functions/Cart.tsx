@@ -1,18 +1,17 @@
-import { StoreItem, CurrencyType } from 'types/Store';
+import { StoreItem, CurrencyType, StoreContextType } from 'types/Store';
 
 export function getCartTotal(cartItems: Array<StoreItem>) {
     const reducer = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     return CurrencyType.format(Number(reducer));
 }
 
-export function removeItemFromCart(item: StoreItem, items: Array<StoreItem>, cartItems: Array<StoreItem>,
-                            setIsCheckout: Function, setCartItems: Function, setItems: Function) {
-    const cartIndex = cartItems.findIndex((ref) => ref.id === item.id);
-    const itemIndex = items.findIndex((ref) => ref.id === item.id);
+export function removeItemFromCart(item: StoreItem, context: StoreContextType) {
+    const cartIndex = context.cartItems.findIndex((ref) => ref.id === item.id);
+    const itemIndex = context.items.findIndex((ref) => ref.id === item.id);
 
     if (cartIndex !== -1) {
-        const updatedCart = [...cartItems];
-        const updatedItems = [...items];
+        const updatedCart = [...context.cartItems];
+        const updatedItems = [...context.items];
 
         if (updatedCart[cartIndex].quantity > 1) {
             updatedCart[cartIndex].quantity--;
@@ -24,8 +23,8 @@ export function removeItemFromCart(item: StoreItem, items: Array<StoreItem>, car
                 updatedItems[itemIndex].quantity++;
         }
 
-        if (updatedCart.length === 0) { setIsCheckout(false); }
-        setCartItems(updatedCart);
-        setItems(updatedItems);
+        if (updatedCart.length === 0) { context.setIsCheckout(false); }
+        context.setCartItems(updatedCart);
+        context.setItems(updatedItems);
     }
 }

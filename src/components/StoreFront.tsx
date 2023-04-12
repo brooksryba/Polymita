@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import StepWizard from "react-step-wizard";
 
-import { StoreContact, StoreShippingService, StoreItem, StoreFilters, defaultStoreFilters } from 'types/Store'
+import { StoreContext, StoreContact, StoreShippingService, StoreItem, StoreFilters, defaultStoreFilters } from 'types/Store'
 import StoreFilter from 'components/StoreFilter'
 import StoreItems from 'components/StoreItems'
 import StoreCart from 'components/StoreCart'
@@ -17,9 +17,15 @@ function StoreFront() {
   const [filter, setFilter] = useState<StoreFilters>(defaultStoreFilters);
   const [items, setItems] = useState<StoreItem[]>([]);
   const [cartItems, setCartItems] = useState<StoreItem[]>([]);
+  const [contact, setContact] = useState<StoreContact>();
+  const [shipping, setShipping] = useState<StoreShippingService>();
 
-  const [userContact, setUserContact] = useState<StoreContact>();
-  const [userShipping, setUserShipping] = useState<StoreShippingService>();
+  const context = {filter: filter, setFilter: setFilter,
+                  items: items, setItems: setItems,
+                  cartItems: cartItems, setCartItems: setCartItems,
+                 contact: contact, setContact: setContact,
+                shipping: shipping, setShipping: setShipping,
+              isCheckout: isCheckout, setIsCheckout: setIsCheckout}
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND}/list`)
@@ -34,31 +40,26 @@ function StoreFront() {
 
   return (
     <section className='Store'>
-      <div className='sidebar'>
-        <StoreCart
-          isCheckout={isCheckout}
-          setIsCheckout={setIsCheckout}
-          cartItems={cartItems}
-          setCartItems={setCartItems}
-          items={items}
-          setItems={setItems} />
-        <StoreFilter active={!isCheckout} filter={filter} setFilter={setFilter} />
-      </div>
-      <div className='content'>
-          {isCheckout ?
-            <div className='StoreCheckout'>
-              <h2><span className="material-symbols-outlined">point_of_sale</span>Checkout:</h2>
-              <StepWizard>
-                <StoreCheckoutContact setContact={setUserContact}/>
-                <StoreCheckoutShipping cartItems={cartItems} contact={userContact} setShipping={setUserShipping}/>
-                <StoreCheckoutPayment cartItems={cartItems} setCartItems={setCartItems} setIsCheckout={setIsCheckout} contact={userContact} shipping={userShipping}/>
-              </StepWizard>
-            </div>
-            :
-            <StoreItems filter={filter} cartItems={cartItems} setCartItems={setCartItems} items={items} setItems={setItems} />
-          }
-      </div>
-
+      <StoreContext.Provider value={context}>
+        <div className='sidebar'>
+          <StoreCart />
+          <StoreFilter active={!isCheckout}/>
+        </div>
+        <div className='content'>
+            {isCheckout ?
+              <div className='StoreCheckout'>
+                <h2><span className="material-symbols-outlined">point_of_sale</span>Checkout:</h2>
+                <StepWizard>
+                  <StoreCheckoutContact />
+                  <StoreCheckoutShipping />
+                  <StoreCheckoutPayment />
+                </StepWizard>
+              </div>
+              :
+              <StoreItems  />
+            }
+        </div>
+      </StoreContext.Provider>
     </section>
   )
 }

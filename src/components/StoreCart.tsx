@@ -1,13 +1,17 @@
-import { StoreItem, StoreCartProps } from 'types/Store'
+import { useContext } from 'react';
+import { StoreContext, StoreItem } from 'types/Store'
 
 import StoreCartItem from 'components/StoreCartItem';
-import { Heading, Optional } from 'components/Base';
+import { Heading, Optional, MaterialButton } from 'components/Base';
 
 import { getCartTotal, removeItemFromCart } from 'functions/Cart';
 
 
-const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items, setItems, cartItems, setCartItems }) => {
-    const updateCart = (item: StoreItem) => removeItemFromCart(item, items, cartItems, setIsCheckout, setCartItems, setItems);
+const StoreCart: React.FC = () => {
+    const context = useContext(StoreContext);
+    const { cartItems, isCheckout, setIsCheckout } = context;
+
+    const updateCart = (item: StoreItem) => removeItemFromCart(item, context);
 
     return (
         <div className="StoreCart">
@@ -15,9 +19,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
 
             <Optional condition={cartItems.length > 0}>
                 {cartItems.map((item: StoreItem) => (<StoreCartItem key={item.id} item={item} onDelete={updateCart} />))}
-
+                <hr/>
                 <Optional condition={!isCheckout}>
-                    <hr />
                     <div className="subtotal">
                         <h4>Sub-total:</h4>
                         <span>{getCartTotal(cartItems)}</span>
@@ -31,11 +34,11 @@ const StoreCart: React.FC<StoreCartProps> = ({ isCheckout, setIsCheckout, items,
             </Optional>
 
             <Optional condition={cartItems.length > 0 && !isCheckout}>
-                <button onClick={() => setIsCheckout(true)}>Checkout</button>
+                <MaterialButton className="blue" name="shopping_bag" onClick={() => setIsCheckout(true)}>Checkout</MaterialButton>
             </Optional>
 
             <Optional condition={isCheckout}>
-                <button onClick={() => setIsCheckout(false)}>Return to Store</button>
+                <MaterialButton name="arrow_back" onClick={() => setIsCheckout(false)}>Return to Store</MaterialButton>
             </Optional>
         </div>
     )

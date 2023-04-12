@@ -1,3 +1,5 @@
+import React from "react";
+
 export const CurrencyType = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
@@ -79,41 +81,34 @@ export type StoreEstimate = {
 
 export type StoreFilterProps = {
     active: boolean;
+}
+
+export interface StoreContextType {
     filter: StoreFilters;
-    setFilter: React.Dispatch<React.SetStateAction<StoreFilters>>;
-}
-
-export type StoreItemsProps = {
+    setFilter: Function;
     items: Array<StoreItem>;
-    filter: StoreFilters;
-    setItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
+    setItems: Function;
     cartItems: Array<StoreItem>;
-    setCartItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
-};
-
-export type StoreCartProps = {
-    isCheckout: boolean;
-    setIsCheckout: React.Dispatch<React.SetStateAction<boolean>>;
-    items: Array<StoreItem>;
-    setItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
-    cartItems: Array<StoreItem>;
-    setCartItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
-};
-
-export type StoreCheckoutContactProps = {
-    setContact: React.Dispatch<React.SetStateAction<StoreContact>>;
-}
-
-export type StoreCheckoutShippingProps = {
-    cartItems: Array<StoreItem>;
+    setCartItems: Function;
     contact: StoreContact | undefined;
-    setShipping: React.Dispatch<React.SetStateAction<StoreShippingService>>;
-}
-
-export type StoreCheckoutPaymentProps = {
-    cartItems: Array<StoreItem>;
-    contact: StoreContact | undefined;
+    setContact: Function;
     shipping: StoreShippingService | undefined;
-    setCartItems: React.Dispatch<React.SetStateAction<StoreItem[]>>;
-    setIsCheckout: React.Dispatch<React.SetStateAction<boolean>>;
+    setShipping: Function;
+    isCheckout: boolean;
+    setIsCheckout: Function;
 }
+
+export const StoreContext = React.createContext<StoreContextType>({
+    filter: defaultStoreFilters,
+    setFilter: (() => {}),
+    items: [],
+    setItems: (() => {}),
+    cartItems: [],
+    setCartItems: (() => {}),
+    contact: undefined,
+    setContact: (() => {}),
+    shipping: undefined,
+    setShipping: (() => {}),
+    isCheckout: false,
+    setIsCheckout: (() => {})
+});

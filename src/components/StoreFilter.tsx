@@ -1,25 +1,10 @@
-import { useRef, useState, useEffect } from "react";
-import { StoreFilterProps, defaultStoreFilters } from "types/Store";
+import { useContext } from "react";
 
-const StoreFilter: React.FC<StoreFilterProps> = ({ active, filter, setFilter }) => {
-    const priceRef = useRef<HTMLInputElement>(null);
-    const [price, setPrice] = useState(filter.price);
-    const [sort, setSort] = useState(filter.sort);
-    const [type, setType] = useState(filter.type);
+import { StoreContext, StoreFilterProps, defaultStoreFilters } from "types/Store";
 
-    useEffect(() => {
-        const newFilter = { ...filter };
-        newFilter.type = type;
-        newFilter.sort = sort;
-        newFilter.price = Number(price);
-        setFilter(newFilter);
-    }, [price, sort, type]);
 
-    function doReset() {
-        setPrice(defaultStoreFilters.price);
-        setSort(defaultStoreFilters.sort);
-        setType(defaultStoreFilters.type);
-    }
+const StoreFilter: React.FC<StoreFilterProps> = ({ active }) => {
+    const { filter, setFilter } = useContext(StoreContext);
 
     return (
         <div className={active ? "StoreFilter" : "StoreFilter disable"}>
@@ -30,7 +15,7 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ active, filter, setFilter }) 
                 <span className="material-symbols-outlined">
                     category
                 </span>Product Type:</label><br />
-            <select id="type" value={type} onChange={(e) => setType(e.target.value)}>
+                <select id="type" value={filter.type} onChange={(e) => setFilter({...filter, type: e.target.value})}>
                 <option value="all">All</option>
                 <option value="painting">Paintings</option>
                 <option value="pottery">Pottery</option>
@@ -42,7 +27,7 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ active, filter, setFilter }) 
                 <span className="material-symbols-outlined">
                     sort_by_alpha
                 </span>Sort By:</label><br />
-            <select id="sort" value={sort} onChange={(e) => setSort(e.target.value)}>
+                <select id="sort" value={filter.sort} onChange={(e) => setFilter({...filter, sort: e.target.value})}>
                 <option value="date">Release Date</option>
                 <option value="price">Price</option>
                 <option value="category">Type</option>
@@ -54,11 +39,11 @@ const StoreFilter: React.FC<StoreFilterProps> = ({ active, filter, setFilter }) 
                 price_change
             </span>Price Range:</label><br />
             <span className="price">$0</span>
-            <input ref={priceRef} type="range" id="price" name="rangeInput" value={price} min="0" max="100" step="1" onChange={(e) => setPrice(Number(e.target.value))} />
-            <span className="price">${price}</span><br />
+            <input  type="range" id="price" name="rangeInput" value={filter.price} min="0" max="100" step="1" onChange={(e) => setFilter({...filter, price: Number(e.target.value)})} />
+            <span className="price">${filter.price}</span><br />
             <hr />
 
-            <button onClick={() => doReset()}>Reset</button>
+            <button className="half" onClick={() => setFilter(defaultStoreFilters)}>Reset</button>
         </div>
     )
 }

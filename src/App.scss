@@ -17,6 +17,53 @@ body {
         border-top: 1px solid #aaa;
     }
 
+    button {
+        font-family: 'IBM Plex Serif', serif;
+        cursor: pointer;
+        position: relative;
+        width: 100%;
+        font-size: .9em;
+        padding: 3px 0px 6px 0px;
+        border-radius: 4px;
+        text-shadow: 0px 1px 2px white;
+        margin-top: 5px;
+
+        background-color: #eee ;
+        border: 1px solid #aaa ;
+
+        &:focus {
+            box-shadow: 0 0 0 3px #eee;
+        }
+
+        div + span {
+            vertical-align: middle;
+            position: absolute;
+            left: 5px;
+            top: 4px;
+            font-size: 1.5em;
+        }
+
+        div {
+            padding-left: 8px;
+        }
+
+        &.half  {
+            width: 50%;
+        }
+
+        &.blue {
+            background-color: #4fa0d9 ;
+            border: 1px solid #356a91 ;
+            text-shadow: 0px 1px 2px black;
+            color: white;
+
+            &:focus {
+                box-shadow: 0 0 0 3px #4fa0d988;
+            }
+        }
+
+    }
+
     header {
         text-align: center;
         margin-bottom: 50px;
@@ -221,9 +268,10 @@ body {
                         font-family: 'IBM Plex Serif', serif;
                     }
 
+
                     h4 {
                         margin-top: 0px;
-                        margin-bottom: 5px;
+                        margin-bottom: 0px;
                         display: inline-block;
 
                         & + span {
@@ -433,10 +481,26 @@ div.swal2-popup.swal2-modal {
         max-height: 500px;
     }
 
+    .swal2-styled.swal2-confirm {
+        border: 0;
+        border-radius: .25em;
+        background: initial;
+        background-color: initial;
+        background-color: #4fa0d9;
+        color: #fff;
+        font-size: 1em;
+
+        font-family: 'IBM Plex Serif', serif;
+
+        &:focus {
+            box-shadow: 0 0 0 3px #4fa0d988;
+        }
+    }
+
     i {
         &.stock {
             &.limited {
-                color: red;
+                color: rgba(129, 181, 143, 1);
             }
         }
     }

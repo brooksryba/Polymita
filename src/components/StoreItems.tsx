@@ -1,68 +1,14 @@
-import { StoreItem, StoreItemsProps } from 'types/Store'
-import SweetAlert from 'components/Swal';
+import { useContext } from 'react';
+import { StoreContext, StoreItem } from 'types/Store'
+
+import { handleShowItemDetails } from 'functions/Store';
 
 
-const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartItems, setCartItems }) => {
-    function addItemToCart(item: StoreItem) {
-        const existingItemIndex = cartItems.findIndex(
-            (cartItem) => cartItem.id === item.id
-        );
+const StoreItems: React.FC = () => {
+    const context = useContext(StoreContext);
+    const { items, filter} = context;
 
-        const existingItemRefIndex = items.findIndex(
-            (cartItem) => cartItem.id === item.id
-        );
-
-        const updatedCartItems = [...cartItems];
-        const updatedItems = [...items];
-        if (existingItemIndex !== -1) {
-            if (updatedCartItems[existingItemIndex].quantity <= items[existingItemRefIndex].quantity || items[existingItemRefIndex].quantity === -1) {
-                updatedCartItems[existingItemIndex].quantity++;
-                if(updatedItems[existingItemRefIndex].quantity !== -1)
-                    updatedItems[existingItemRefIndex].quantity--;
-            } else {
-
-            }
-        } else {
-            updatedCartItems.push({ ...item, quantity: 1 });
-            if(updatedItems[existingItemRefIndex].quantity !== -1)
-                updatedItems[existingItemRefIndex].quantity--;
-        }
-        setCartItems(updatedCartItems);
-        setItems(updatedItems);
-    }
-
-    function showItemPopup(item: StoreItem) {
-        SweetAlert.fire({
-            title: `<strong>${item.name} <i>- $${item.price}</strong>`,
-            html:`
-                <i class="stock ${(item.quantity === 1 ? "limited" : "")}">${(item.quantity === -1 ? "Unlimited" : (item.quantity === 1 ? `Only ${item.quantity}` : item.quantity))} of this item in stock</i>
-                <ul>
-                    <li>Weight: ${item.weight} lb(s).</li>
-                    <li>Size: ${item.size}</li>
-                    <li>Added: ${new Date(item.date*1000).toLocaleDateString('en-US', {
-                        month: '2-digit',
-                        day: '2-digit',
-                        year: '2-digit',
-                        })}</li>
-                </ul>
-            `,
-            imageUrl: require.context("images/", true, /\.(webp)$/)(item.image),
-            imageAlt: item.name,
-            showCancelButton: true,
-            confirmButtonText: 'Add to Cart',
-          }).then((result) => {
-            if (result.isConfirmed) {
-                addItemToCart(item)
-                SweetAlert.fire({
-                    icon: 'success',
-                    title: 'Item added to the cart',
-                    showConfirmButton: false,
-                    timer: 1500
-                  })
-            }
-          })
-    }
-
+    const onClick = ((item: StoreItem) => {handleShowItemDetails(item, context)})
 
     const renderItems = items
         .sort((a: StoreItem, b: StoreItem) => (
@@ -71,7 +17,7 @@ const StoreItems: React.FC<StoreItemsProps> = ({ filter, items, setItems, cartIt
         .filter((item: StoreItem) => (filter.type === "all" ? true : item.category === filter.type))
         .filter((item: StoreItem) => item.price <= filter.price)
         .map((item: StoreItem) => ((item.quantity !== 0 ?
-            <div key={item.id} className="item" onClick={() => showItemPopup(item)}>
+            <div key={item.id} className="item" onClick={() => onClick(item)}>
             <div className="image">
                 <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)}/>
             </div>
