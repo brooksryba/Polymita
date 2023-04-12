@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 
-export const ContactUs:React.FC = () => {
+export const ContactUs: React.FC = () => {
     const form = useRef<HTMLFormElement>(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
 

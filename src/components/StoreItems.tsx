@@ -1,30 +1,25 @@
 import { useContext } from 'react';
 import { StoreContext, StoreItem } from 'types/Store'
 
-import { handleShowItemDetails } from 'functions/Store';
+import { mapStoreItems, handleShowItemDetails } from 'functions/Store';
 
 
 const StoreItems: React.FC = () => {
     const context = useContext(StoreContext);
-    const { items, filter} = context;
+    const { items, filter } = context;
 
-    const onClick = ((item: StoreItem) => {handleShowItemDetails(item, context)})
+    const onClick = ((item: StoreItem) => { handleShowItemDetails(item, context) })
 
-    const renderItems = items
-        .sort((a: StoreItem, b: StoreItem) => (
-            a[filter.sort as keyof StoreItem] === b[filter.sort as keyof StoreItem] ? 0 :
-            a[filter.sort as keyof StoreItem] < b[filter.sort as keyof StoreItem] ? -1 : 1))
-        .filter((item: StoreItem) => (filter.type === "all" ? true : item.category === filter.type))
-        .filter((item: StoreItem) => item.price <= filter.price)
+    const renderItems = mapStoreItems(items, filter)
         .map((item: StoreItem) => ((item.quantity !== 0 ?
             <div key={item.id} className="item" onClick={() => onClick(item)}>
-            <div className="image">
-                <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)}/>
-            </div>
-            <hr/>
-            <span className="title">{item.name}</span><br/>
-            Price: <span className="price">${item.price}</span><br/>
-            Size: <span className="size">{item.size}</span>
+                <div className="image">
+                    <img alt="" src={require.context("images/", true, /\.(webp)$/)(item.image)} />
+                </div>
+                <hr />
+                <span className="title">{item.name}</span><br />
+                Price: <span className="price">${item.price}</span><br />
+                Size: <span className="size">{item.size}</span>
             </div>
             : <span key={item.id}></span>)));
 

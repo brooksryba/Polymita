@@ -19,7 +19,7 @@ const StoreCart: React.FC = () => {
 
             <Optional condition={cartItems.length > 0}>
                 {cartItems.map((item: StoreItem) => (<StoreCartItem key={item.id} item={item} onDelete={updateCart} />))}
-                <hr/>
+                <hr />
                 <Optional condition={!isCheckout}>
                     <div className="subtotal">
                         <h4>Sub-total:</h4>

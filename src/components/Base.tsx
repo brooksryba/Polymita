@@ -85,14 +85,14 @@ interface InputProps {
     className?: string;
     autoComplete?: string;
     value?: string;
-    onChange?: Function ;
+    onChange?: Function;
 }
 
 export const Input: FC<InputProps> = ({ type, label, name, className, autoComplete, value, onChange }) => {
     return (
         <>
             <label htmlFor={name}>{label}</label>
-            <input type={type} name={name} className={className} value={value} onChange={(e:React.ChangeEvent<HTMLInputElement>) => (onChange? onChange(e): null)} autoComplete={autoComplete}/>
+            <input type={type} name={name} className={className} value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => (onChange ? onChange(e) : null)} autoComplete={autoComplete} />
         </>
     );
 };

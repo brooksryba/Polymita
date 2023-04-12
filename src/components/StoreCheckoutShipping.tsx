@@ -11,7 +11,7 @@ const StoreCheckoutShipping: React.FC<Partial<StepWizardChildProps>> = ({ nextSt
   const [estimate, setEstimate] = useState<StoreEstimate>();
   const [selection, setSelection] = useState("");
 
-  const onOptionChange = ((e:any) => { setSelection(e.target.value) })
+  const onOptionChange = ((e: any) => { setSelection(e.target.value) })
 
   useEffect(() => {
     handleShippingFetch(contact, cartItems, setEstimate, setSelection)
@@ -26,35 +26,35 @@ const StoreCheckoutShipping: React.FC<Partial<StepWizardChildProps>> = ({ nextSt
         </Optional>
         <Optional condition={estimate === undefined}>
           <Oval
-              height={80}
-              width={80}
-              color="#4fa94d"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-              ariaLabel='oval-loading'
-              secondaryColor="#4fa94d"
-              strokeWidth={2}
-              strokeWidthSecondary={2}
-            />
+            height={80}
+            width={80}
+            color="#4fa94d"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel='oval-loading'
+            secondaryColor="#4fa94d"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
         </Optional>
         <Optional condition={estimate !== undefined}>
           {estimate?.rates
-          .sort((a: StoreShippingService, b: StoreShippingService) => a.delivery_days - b.delivery_days)
-          .map((rate: StoreShippingService) =>
-            <div key={rate.service}>
-              <input id={rate.service} type='radio' name='service' onChange={onOptionChange} value={rate.service}/>
-              <label htmlFor={rate.service}>
-                ({rate.delivery_days}-{Math.ceil(rate.delivery_days*1.5)} day) {rate.service} - {CurrencyType.format(Number(rate.rate))}
-              </label>
-              <br/>
-            </div>
+            .sort((a: StoreShippingService, b: StoreShippingService) => a.delivery_days - b.delivery_days)
+            .map((rate: StoreShippingService) =>
+              <div key={rate.service}>
+                <input id={rate.service} type='radio' name='service' onChange={onOptionChange} value={rate.service} />
+                <label htmlFor={rate.service}>
+                  ({rate.delivery_days}-{Math.ceil(rate.delivery_days * 1.5)} day) {rate.service} - {CurrencyType.format(Number(rate.rate))}
+                </label>
+                <br />
+              </div>
             )}
         </Optional>
       </div>
       <div className="buttons">
-        <MaterialButton name="arrow_back" className="back" onClick={previousStep}/>
-        <MaterialButton className="next" onClick={() => handleShippingSelection(estimate, selection, setShipping, nextStep)} name="arrow_forward"/>
+        <MaterialButton name="arrow_back" className="back" onClick={previousStep} />
+        <MaterialButton className="next" onClick={() => handleShippingSelection(estimate, selection, setShipping, nextStep)} name="arrow_forward" />
       </div>
     </div>
   )
