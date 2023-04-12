@@ -1,6 +1,5 @@
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import 'App.scss';
+import { Header, Footer } from 'components/Base'
+
 
 function HomePage() {
     return (

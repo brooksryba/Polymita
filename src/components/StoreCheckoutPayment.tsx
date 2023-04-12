@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 
 import { StoreCheckoutPaymentProps } from 'types/Store';
 import SweetAlert from 'components/Swal';
+import MaterialButton from "components/MaterialButton";
 
 declare global {
   namespace NodeJS {
@@ -137,9 +138,7 @@ const StoreCheckoutPayment: React.FC<StoreCheckoutPaymentProps & Partial<StepWiz
         </PayPalScriptProvider>
       </div>
       <div className="buttons">
-        <button className='back' onClick={previousStep}>
-            <span className="material-symbols-outlined">arrow_back</span>
-        </button>
+        <MaterialButton name="arrow_back" className="back" onClick={previousStep}/>
       </div>
     </div>
   )

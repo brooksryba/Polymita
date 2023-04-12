@@ -4,6 +4,7 @@ import { Oval } from 'react-loader-spinner';
 
 import { StoreShippingService, StoreEstimate, StoreCheckoutShippingProps } from "types/Store";
 import SweetAlert from 'components/Swal';
+import MaterialButton from "components/MaterialButton";
 
 
 const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepWizardChildProps>> = ({ cartItems, contact, setShipping, nextStep, previousStep }) => {
@@ -93,12 +94,8 @@ const StoreCheckoutShipping: React.FC<StoreCheckoutShippingProps & Partial<StepW
             />)}
       </div>
       <div className="buttons">
-        <button className="back" onClick={previousStep}>
-          <span className="material-symbols-outlined">arrow_back</span>
-        </button>
-        <button className="next" onClick={doSetShipping}>
-          <span className="material-symbols-outlined">arrow_forward</span>
-        </button>
+        <MaterialButton name="arrow_back" className="back" onClick={previousStep}/>
+        <MaterialButton className="next" onClick={doSetShipping} name="arrow_forward"/>
       </div>
     </div>
   )

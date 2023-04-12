@@ -4,6 +4,7 @@ import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
 import { StoreCheckoutContactProps } from "types/Store";
 import SweetAlert from 'components/Swal';
+import MaterialButton from "./MaterialButton";
 
 const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
     const usernameRef = useRef<HTMLInputElement>(null);
@@ -111,9 +112,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
                 </Autocomplete>
             </div>
             <div className="buttons">
-                <button className="next" onClick={doNextStep}>
-                    <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
+                <MaterialButton className="next" onClick={doNextStep} name="arrow_forward"/>
             </div>
       </div>
     )

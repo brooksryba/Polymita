@@ -1,7 +1,5 @@
+import { Header, Footer } from 'components/Base'
 import GallerySet from 'components/GallerySet';
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import 'App.scss';
 
 
 function GalleryPage() {

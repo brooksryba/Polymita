@@ -1,3 +1,8 @@
+export const CurrencyType = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+});
+
 export type StoreContact = {
     username: string;
     name: string;

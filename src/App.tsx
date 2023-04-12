@@ -4,7 +4,7 @@ import GalleryPage from 'pages/Gallery';
 import StorePage from 'pages/Store';
 import AboutPage from 'pages/About';
 import ContactPage from 'pages/Contact';
-
+import 'App.scss';
 
 function App() {
   return (

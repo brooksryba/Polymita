@@ -1,7 +1,6 @@
-import Header from 'components/Header'
-import Footer from 'components/Footer'
+import { Header, Footer } from 'components/Base'
 import StoreFront from 'components/StoreFront'
-import 'App.scss';
+
 
 function StorePage() {
     return (
