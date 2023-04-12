@@ -16,7 +16,7 @@ interface Dictionary {
 
 
 const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWizardChildProps>> = ({ setContact, nextStep }) => {
-    const [contactInfo, setContactInfo] = useState<StoreContact>(defaultStoreContact);
+    const [form, setForm] = useState<StoreContact>(defaultStoreContact);
     const [searchResult, setSearchResult] = useState<google.maps.places.Autocomplete>();
     const { isLoaded } = useLoadScript({googleMapsApiKey: apiKey, libraries: libraries});
 
@@ -24,22 +24,22 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
     function onUpdate(event: React.ChangeEvent<HTMLInputElement>, field: string) {
         const values:Dictionary = {};
         values[field] = event.target.value;
-        setContactInfo({...contactInfo, ...values})
+        setForm({...form, ...values})
     }
 
     return (
         <div className='Contact'>
             <div className="half">
                 <Heading icon="contacts" level={3}>Contact Information:</Heading>
-                <Input label="Name:" name='username' type='text' autoComplete="name" value={contactInfo.username} onChange={(e:any) => onUpdate(e, "username")} />
-                <Input label="E-mail:" name='email' type='email' autoComplete="email" value={contactInfo.email} onChange={(e:any) => onUpdate(e, "email")} />
-                <Input label="Phone:" name='phone' type='tel' autoComplete="tel" value={contactInfo.phone} onChange={(e:any) => onUpdate(e, "phone")} />
+                <Input label="Name:" name='username' type='text' autoComplete="name" value={form.username} onChange={(e:any) => onUpdate(e, "username")} />
+                <Input label="E-mail:" name='email' type='email' autoComplete="email" value={form.email} onChange={(e:any) => onUpdate(e, "email")} />
+                <Input label="Phone:" name='phone' type='tel' autoComplete="tel" value={form.phone} onChange={(e:any) => onUpdate(e, "phone")} />
             </div>
             <div className="half">
                 <Heading icon="home" level={3}>Shipping Address:</Heading>
-                <Input label="Name:" name='name' type='text' value={contactInfo.name} onChange={(e:any) => onUpdate(e, "name")}/>
+                <Input label="Name:" name='name' type='text' value={form.name} onChange={(e:any) => onUpdate(e, "name")}/>
                 <Optional condition={isLoaded}>
-                    <Autocomplete onPlaceChanged={() => handleAddressAutofill(searchResult, contactInfo)} onLoad={onLoad}>
+                    <Autocomplete onPlaceChanged={() => handleAddressAutofill(searchResult, form)} onLoad={onLoad}>
                         <>
                             <label>Address:</label>
                             <input
@@ -52,7 +52,7 @@ const StoreCheckoutContact: React.FC<StoreCheckoutContactProps & Partial<StepWiz
                 </Optional>
             </div>
             <div className="buttons">
-                <MaterialButton className="next" onClick={() => handleContactNextStep(contactInfo, setContact, nextStep)} name="arrow_forward" />
+                <MaterialButton className="next" onClick={() => handleContactNextStep(form, setContact, nextStep)} name="arrow_forward" />
             </div>
         </div>
     )
