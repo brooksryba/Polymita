@@ -262,6 +262,8 @@ def admin_update_products():
     # Create product where does not exist
     products = []
     for index, row in df.iterrows():
+        row['date'] = datetime.datetime.fromtimestamp(row['date'])
+
         product = Product.find(row['id'])
         if product is not None:
             product.update(**{r:row[r] for r in row.keys() if r not in ['id']})
