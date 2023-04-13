@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 from flask import g
 from sqlalchemy import create_engine, Column, JSON, Integer, String, DateTime, Float, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, backref
@@ -7,6 +8,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 
+if not os.path.exists("data/"):
+    os.makedirs("data/")
 
 # Create the engine and connect to the database
 engine = create_engine('sqlite:///data/store.db', echo=True)
