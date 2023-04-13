@@ -1,9 +1,12 @@
 import datetime
 import easypost
 import os
+import json
+import pandas as pd
 from dotenv import load_dotenv
 from easypost import Address, Parcel, Shipment
-from flask import Flask, request, g, jsonify, make_response
+from functools import wraps
+from flask import Flask, request, g, jsonify, make_response, abort, send_file
 from flask_cors import CORS
 from random import randint
 
@@ -20,6 +23,7 @@ PAYPAL_CLIENT_SECRET = os.environ.get("PAYPAL_CLIENT_SECRET")
 PAYPAL_MODE = os.environ.get("PAYPAL_MODE")
 EASYPOST_API_KEY = os.environ.get("EASYPOST_API_KEY")
 EASYPOST_ADDRESS_ID = os.environ.get("EASYPOST_ADDRESS_ID")
+ADMIN_API_KEY = os.environ.get("ADMIN_API_KEY")
 
 # Construct the Flask application
 # Instantiate custom JSON encoder
@@ -33,6 +37,16 @@ CORS(app)
 easypost.api_key = EASYPOST_API_KEY
 ORIGIN_ADDRESS = Address.retrieve(EASYPOST_ADDRESS_ID)
 
+def authenticated(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        value = request.headers.get('Authorization')
+        if not value:
+            abort(400, 'Missing Authorization header')
+        if value != ADMIN_API_KEY:
+            abort(400, 'Authorization token is bad')
+        return func(*args, **kwargs)
+    return decorated_function
 
 def json_error(message):
     '''Return Flask response wrapping error text.'''
@@ -138,9 +152,9 @@ def purchase():
                 date=datetime.datetime.now(),
                 products=products,
                 weight=weight,
-                service=service,
+                label_service=service,
                 shipment=shipment.id,
-                address=dest.to_dict(),
+                address=dest.id,
                 is_processed=False,
                 is_shipped=False)
 
@@ -181,7 +195,7 @@ def confirm():
         # Use the Shipment created in the purchase phase
         shipment = Shipment.retrieve(order.shipment)
         # Select the shipping service from the user
-        rate = [s for s in shipment.rates if s.service == order.service][0]
+        rate = [s for s in shipment.rates if s.service == order.label_service][0]
         # Execute payment on the shipping label
         label = shipment.buy(rate=rate)
     except:
@@ -193,10 +207,10 @@ def confirm():
     capture = PayPal(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE).capture_payment(order_id=order_id)
     receivables = capture['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']
     order.update(email=capture.get("payer").get("email_address"),
-                fee=receivables["paypal_fee"]["value"],
-                price=receivables["gross_amount"]["value"],
-                net=receivables["net_amount"]["value"],
-                label=rate.rate,
+                paypal_fee=float(receivables["paypal_fee"]["value"]),
+                order_price=float(receivables["gross_amount"]["value"]),
+                net_profit=float(receivables["net_amount"]["value"]) - float(rate.rate),
+                label_price=float(rate.rate),
                 tracker=label["tracker"]["public_url"],
                 is_processed=True)
 
@@ -208,10 +222,10 @@ def confirm():
 
 
 @app.route('/orders', methods=['GET'])
+@authenticated
 def orders():
     '''Return a list of all orders in the database.'''
     return jsonify(Order.find_all())
-
 
 @app.route('/list', methods=['GET'])
 def list_active():
@@ -221,23 +235,95 @@ def list_active():
 
 
 @app.route('/list_all', methods=['GET'])
+@authenticated
 def list_all():
     '''Return a list of all products regardless of stock.'''
     return jsonify(Product.find_all())
 
 
-@app.route('/fixtures', methods=['GET'])
-def create():
-    '''Create a set of products to be used for testing.'''
+@app.route('/admin/products/update', methods=['POST'])
+@authenticated
+def admin_update_products():
+    '''Update the production database with a local copy of the products.'''
+    # Read the file from Flask
+    if 'file' not in request.files:
+        return 'No file submitted'
+
+    file = request.files['file']
+    if not file.filename:
+        return 'Invalid filename'
+
+    # Construct a DataFrame from the file
+    df = pd.read_excel(file)
+    data = df.to_dict(orient='records')
+
+    # Iterate the DataFrame
+    # Update product where exists
+    # Create product where does not exist
     products = []
-    products.append(Product.create(category='photography', quantity=-1, name="Red Dragonfly Print", image="images/photography/IMG_2152.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=5.00, weight=0.2, size='8" x 10"',))
-    products.append(Product.create(category='pottery', quantity=1, name="Mossy Oak Mug", image="images/pottery/IMG_6770.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=10.00, weight=1.5, size='12 fl oz',))
-    products.append(Product.create(category='pottery', quantity=1, name="Cobalt Dreams Mug", image="images/pottery/IMG_6763.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=20.00, weight=1.5, size='12 fl oz',))
-    products.append(Product.create(category='pottery', quantity=1, name="Inkwell Mug", image="images/pottery/IMG_6776.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=30.00, weight=1.5, size='12 fl oz',))
-    products.append(Product.create(category='pottery', quantity=2, name="Ocean Sands Mug", image="images/pottery/IMG_6797.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=40.00, weight=1.5, size='12 fl oz',))
-    products.append(Product.create(category='pottery', quantity=1, name="Toasted Mallow Planter", image="images/pottery/IMG_6799_.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=50.00, weight=1.5, size='12 fl oz',))
-    products.append(Product.create(category='pottery', quantity=2, name="Autumn Rush Mug", image="images/pottery/IMG_6792.webp", date=datetime.datetime.now() - datetime.timedelta(days=randint(0, 30)), price=60.00, weight=1.5, size='12 fl oz',))
+    for index, row in df.iterrows():
+        product = Product.find(row['id'])
+        if product is not None:
+            product.update(**{r:row[r] for r in row.keys() if r not in ['id']})
+            products.append(product)
+        else:
+            products.append(Product.create(**row))
+
+    # Commit the session now that we have no errors
+    g.session.commit()
+
     return jsonify(products)
+
+@app.route('/admin/products/get', methods=['GET'])
+@authenticated
+def admin_get_products():
+    '''Build Excel dataframe of the store contents.'''
+    # Serialize all the products to memory
+    data = json.loads(json.dumps(Product.find_all(), cls=SQLAlchemyEncoder))
+    df = pd.DataFrame(data)
+
+    # Create an Excel writer object
+    # Write the DataFrame to the Excel file
+    # Save the Excel file
+    writer = pd.ExcelWriter('Products.xlsx')
+    df.to_excel(writer, sheet_name='Sheet1', index=False)
+    writer._save()
+
+    return send_file('Products.xlsx', as_attachment=True)
+
+@app.route('/admin/orders/get', methods=['GET'])
+@authenticated
+def admin_get_orders():
+    '''Build Excel dataframe of the store contents.'''
+    # Serialize all the products to memory
+    data = json.loads(json.dumps(Order.find_all(), cls=SQLAlchemyEncoder))
+    df = pd.DataFrame(data)
+
+    # Create an Excel writer object
+    # Write the DataFrame to the Excel file
+    # Save the Excel file
+    writer = pd.ExcelWriter('Orders.xlsx')
+    df.to_excel(writer, sheet_name='Sheet1', index=False)
+    writer._save()
+
+    return send_file('Orders.xlsx', as_attachment=True)
+
+@app.route('/admin/orders/ship/<id>', methods=['PUT'])
+@authenticated
+def admin_update_order_ship(id:str):
+    '''Modify order to set shipped properties.'''
+    # Find the order by ID
+    # Update the order with new values
+    order = Order.find(id)
+    if order is not None:
+        order.update(shipping_date=datetime.datetime.now(),
+                     shipping_number=request.json.get("tracker"),
+                     is_shipped=True)
+
+    # Commit the session now that we have no errors
+    g.session.commit()
+
+    return jsonify(order)
 
 
 # Allow the application to run as main

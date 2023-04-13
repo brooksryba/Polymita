@@ -59,7 +59,6 @@ class Product(Base, BaseExtension):
     '''Product table contains information for item for sale in store.'''
     __tablename__ = 'products'
 
-
     id = Column(Integer, primary_key=True)
     name = Column(String)
     date = Column(DateTime)
@@ -78,13 +77,13 @@ class Order(Base, BaseExtension):
     id = Column(String, primary_key=True)
     email = Column(String)
     date = Column(DateTime)
-    address = Column(JSON)
-    fee = Column(Float)
-    price = Column(Float)
-    net = Column(Float)
-    label = Column(Float)
+    address = Column(String)
+    net_profit = Column(Float)
+    paypal_fee = Column(Float)
+    order_price = Column(Float)
+    label_price = Column(Float)
+    label_service = Column(String)
     tracker = Column(String)
-    service = Column(String)
     products = Column(JSON)
     weight = Column(Float)
     shipment = Column(String)
