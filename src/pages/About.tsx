@@ -19,32 +19,32 @@ function AboutPage() {
                 </p>
                 <h3>Artist Statement:</h3>
                 <p className="accent">
-                    As an artist, Brooks is driven by a passion for precision and technical design, which is evident in their diverse body of work. From macro
-                    photography to handmade ceramic mugs to photorealistic digital paintings, they strive to create pieces that are not only visually striking
+                    As an artist, Brooks is driven by a passion for precision and technical design, which is evident in his diverse body of work. From macro
+                    photography to handmade ceramic mugs to photorealistic digital paintings, he strives to create pieces that are not only visually striking
                     but also meticulously crafted.<br/><br/>
 
-                    His love for technical design is reflected in their macro photography, where they explore the intricate details of the natural world. Through
-                    their lens, they capture the smallest of details, revealing the beauty and complexity of everyday objects. In their handmade ceramic mugs,
-                    they combine their technical skills with a love for tactile craftsmanship. Each mug is carefully crafted, reflecting their commitment to precision
+                    His love for technical design is reflected in his macro photography, where he explores the intricate details of the natural world. Through
+                    the macro lens, Brooks captures the smallest of details, revealing the beauty and complexity of everyday objects. In his handmade ceramic mugs,
+                    he combines his technical skills with a love for tactile craftsmanship. Each mug is carefully crafted, reflecting his commitment to precision
                     and attention to detail.<br/><br/>
 
-                    Finally, Brooks' photorealistic digital paintings showcase their technical abilities in a different medium. Using digital tools, they create
+                    Finally, Brooks' photorealistic digital paintings showcase his technical abilities in a different medium. Using digital tools, he creates
                     hyper-realistic images that challenge the viewer's perceptions and invite them to engage with the work on a deeper level. Whether through
-                    their macro photography, handmade ceramics, or digital paintings, Brooks' goal as an artist is to create pieces that are both visually
-                    stunning and technically impressive. They are constantly striving to push the boundaries of their craft and explore new ways to express
-                    themselves through their art.
+                    his macro photography, handmade ceramics, or digital paintings, Brooks' goal as an artist is to create pieces that are both visually
+                    stunning and technically impressive. Brooks is constantly striving to push the boundaries of his craft and explore new ways to express
+                    themselves through his art.
                 </p>
                 <h3>Process:</h3>
                 <p className="accentSecondary">
-                    As a ceramic artist working from their home studio, Brooks' process is deeply rooted in the tactile nature of working with clay. Using their
-                    Skutt-818 kiln and spare bedroom turned pottery studio, they are able to fully immerse themselves in the creative process. Each piece they create
-                    begins on the wheel, where they carefully mold and shape the clay into the desired form. From there, they move on to the glazing process, carefully
-                    selecting colors and finishes that will enhance the piece's texture and shape.<br/><br/>
+                    As a ceramic artist working from a home studio, Brooks' process is deeply rooted in the tactile nature of working with clay. Using a
+                    Skutt-818 kiln and spare bedroom turned pottery studio, he is able to fully immerse themselves in the creative process. Each piece Brooks create
+                    begins on the wheel, where he carefully mold and shape the clay into the desired form. From there, he moves on to the glazing process, selecting colors
+                    and finishes that will enhance the piece's texture and shape.<br/><br/>
 
                     When it's time to fire the kiln, Brooks approaches the process with a mixture of excitement and anticipation. Watching the transformation of the
-                    pieces as they are fired is a deeply satisfying experience, and they are always thrilled to see the final product emerge from the kiln. Working
-                    from their home studio allows them to fully engage with the creative process on their own terms, without the distractions or limitations of a
-                    traditional studio. Whether they are experimenting with new glazes or perfecting their throwing technique, Brooks is constantly pushing themselves
+                    pieces as they are fired is a deeply satisfying experience, and he is always thrilled to see the final product emerge from the kiln. Working
+                    from the home studio allows Brooks to fully engage with the creative process on his own terms, without the distractions or limitations of a
+                    traditional studio. Whether experimenting with new glazes or perfecting his throwing technique, Brooks is constantly pushing themselves
                     to explore new possibilities and create work that is both beautiful and functional.
                 </p>
             </section>

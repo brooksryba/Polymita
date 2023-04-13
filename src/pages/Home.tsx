@@ -17,7 +17,7 @@ function HomePage() {
                 </p>
                 <p className="accent">
                     In addition to our photography, we offer handmade ceramics and photorealistic digital paintings, all crafted with the same level of precision
-                    and attention to detail. While our online shop is coming soon, we welcome you to use our contact form to inquire about commissioned work.
+                    and attention to detail. We welcome you to use our contact form to inquire about commissioned work.
                     We are passionate about collaborating with our clients to create unique and personalized pieces.<br/><br/>
 
                     Don't forget to visit our gallery page to stay up-to-date with our latest projects and inspiration. You can also follow us on Instagram and

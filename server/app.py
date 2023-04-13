@@ -74,7 +74,10 @@ def estimate():
     parcel = Parcel.create(weight=16*float(request.args.get("weight")))
     shipment = Shipment.create(to_address=dest, from_address=ORIGIN_ADDRESS, parcel=parcel)
 
-    return {"rates":[{'delivery_days': r.delivery_days or 7, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
+    return {"rates":[{'delivery_days': r.delivery_days or 7,
+                        'carrier':r.carrier,
+                        'service':r.service.replace("International", ""),
+                        'rate':r.rate} for r in shipment.rates]}
 
 
 @app.route('/purchase', methods=['POST'])
