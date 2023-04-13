@@ -7,14 +7,15 @@ import { Heading, MaterialButton, Optional } from "components/Base";
 import { handleShippingSelection, handleShippingFetch } from "functions/Checkout";
 
 const StoreCheckoutShipping: React.FC<Partial<StepWizardChildProps>> = ({ nextStep, previousStep }) => {
-  const { contact, cartItems, setShipping } = useContext(StoreContext);
+  const context = useContext(StoreContext);
+  const { contact, cartItems, setShipping } = context;
   const [estimate, setEstimate] = useState<StoreEstimate>();
   const [selection, setSelection] = useState("");
 
   const onOptionChange = ((e: any) => { setSelection(e.target.value) })
 
   useEffect(() => {
-    handleShippingFetch(contact, cartItems, setEstimate, setSelection)
+    handleShippingFetch(contact, selection, cartItems, setEstimate, setSelection, setShipping)
   }, [contact?.zip, cartItems]);
 
   return (

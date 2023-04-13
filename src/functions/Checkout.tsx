@@ -1,7 +1,7 @@
 import emailjs from '@emailjs/browser';
 import SweetAlert from 'components/Swal';
 
-import { StoreItem, StoreContact, StoreEstimate, StoreContextType } from 'types/Store';
+import { StoreItem, StoreContact, StoreEstimate, StoreContextType, StoreShippingService } from 'types/Store';
 
 
 export function handleAddressAutofill(searchResult: google.maps.places.Autocomplete | undefined, contactInfo: StoreContact) {
@@ -45,16 +45,21 @@ export function handleContactNextStep(contactInfo: StoreContact, setContact: Fun
     }
 }
 
-export function handleShippingFetch(contact: StoreContact | undefined, cartItems: Array<StoreItem>, setEstimate: Function, setSelection: Function) {
+export function handleShippingFetch(contact: StoreContact | undefined, selection: string, cartItems: Array<StoreItem>, setEstimate: Function, setSelection: Function, setShipping: Function) {
     if (!contact)
         return
     setEstimate(undefined);
-    setSelection("");
     const weight = cartItems.reduce((total, item) => total + (item.weight * item.quantity), 0)
     fetch(`${process.env.REACT_APP_BACKEND}/estimate?dest=${contact.zip}&country=${contact.country}&weight=${weight}`)
         .then((response) => response.json())
         .then((data: StoreEstimate) => {
             setEstimate(data);
+            const rate = data.rates.find((rate:StoreShippingService) => rate.service === selection)
+            if(rate === undefined) {
+                setSelection("");
+            } else {
+                setShipping(rate);
+            }
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
