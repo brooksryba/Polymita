@@ -51,7 +51,7 @@ export function handleShippingFetch(contact: StoreContact | undefined, cartItems
     setEstimate(undefined);
     setSelection("");
     const weight = cartItems.reduce((total, item) => total + (item.weight * item.quantity), 0)
-    fetch(`${process.env.REACT_APP_BACKEND}/estimate?dest=${contact.zip}&weight=${weight}`)
+    fetch(`${process.env.REACT_APP_BACKEND}/estimate?dest=${contact.zip}&country=${contact.country}&weight=${weight}`)
         .then((response) => response.json())
         .then((data: StoreEstimate) => {
             setEstimate(data);

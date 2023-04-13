@@ -70,11 +70,11 @@ def teardown_request(exception):
 @app.route('/estimate', methods=['GET'])
 def estimate():
     '''Return a set of shipping rates according to the ZIP code and weight.'''
-    dest = Address.create(zip=request.args.get("dest"))
+    dest = Address.create(zip=request.args.get("dest"), country=request.args.get("country"))
     parcel = Parcel.create(weight=16*float(request.args.get("weight")))
     shipment = Shipment.create(to_address=dest, from_address=ORIGIN_ADDRESS, parcel=parcel)
 
-    return {"rates":[{'delivery_days': r.delivery_days or 1, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
+    return {"rates":[{'delivery_days': r.delivery_days or 7, 'carrier':r.carrier, 'service':r.service, 'rate':r.rate} for r in shipment.rates]}
 
 
 @app.route('/purchase', methods=['POST'])

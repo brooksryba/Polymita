@@ -19,7 +19,7 @@ const StoreCheckoutShipping: React.FC<Partial<StepWizardChildProps>> = ({ nextSt
 
   return (
     <div className='Shipping'>
-      <div className="half">
+      <div className="full">
         <Heading level={3} icon="local_shipping">Shipping Serivce (USPS):</Heading>
         <Optional condition={estimate !== undefined && estimate.rates.length === 0}>
           <span>No rates available for ZIP code {contact?.zip}.</span>
@@ -45,7 +45,13 @@ const StoreCheckoutShipping: React.FC<Partial<StepWizardChildProps>> = ({ nextSt
               <div key={rate.service}>
                 <input id={rate.service} type='radio' name='service' onChange={onOptionChange} value={rate.service} />
                 <label htmlFor={rate.service}>
-                  ({rate.delivery_days}-{Math.ceil(rate.delivery_days * 1.5)} day) {rate.service} - {CurrencyType.format(Number(rate.rate))}
+                  <Optional condition={rate.delivery_days >= 7}>
+                    ({rate.delivery_days}+ days)
+                  </Optional>
+                  <Optional condition={rate.delivery_days < 7}>
+                    ({rate.delivery_days}-{Math.ceil(rate.delivery_days * 1.5)} day)
+                  </Optional>
+                  &nbsp;{rate.service} - {CurrencyType.format(Number(rate.rate))}
                 </label>
                 <br />
               </div>
