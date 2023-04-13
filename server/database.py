@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 # Create the engine and connect to the database
-engine = create_engine('sqlite:///store.db', echo=True)
+engine = create_engine('sqlite:///data/store.db', echo=True)
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
 
