@@ -15,7 +15,7 @@ services:
       context: ./
       dockerfile: Dockerfile-server
     volumes:
-    - ./server/store.db:/app/server/store.db
+    - ./server:/app/server
     ports:
     - 3001:80
     networks:
