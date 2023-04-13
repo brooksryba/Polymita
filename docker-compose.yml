@@ -15,7 +15,7 @@ services:
       context: ./
       dockerfile: Dockerfile-server
     volumes:
-    - db-data:/app/server/data
+    - ./server/data:/app/data
     ports:
     - 3001:80
     networks:
@@ -25,7 +25,3 @@ networks:
   application:
     external: true
     name: brooksrybaproject_application
-
-volumes:
-  db-data:
-    driver: local
