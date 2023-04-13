@@ -586,6 +586,12 @@ div.swal2-popup.swal2-modal {
             div.StoreFilter.disable {
                 display: none;
             }
+
+            div.StoreCheckout {
+                h2 {
+                    margin: 0px 0px;
+                }
+            }
         }
     }
 }

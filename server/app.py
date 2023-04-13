@@ -76,7 +76,7 @@ def estimate():
 
     return {"rates":[{'delivery_days': r.delivery_days or 7,
                         'carrier':r.carrier,
-                        'service':r.service.replace("International", ""),
+                        'service':r.service.replace("International", "").replace("Package", "").replace("Service", ""),
                         'rate':r.rate} for r in shipment.rates]}
 
 
