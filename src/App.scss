@@ -132,6 +132,34 @@ body {
     }
 
     div {
+        &.Home {
+            img {
+                box-sizing: border-box;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                max-width: 100%;
+            }
+        }
+        &.About {
+            img {
+                max-width: 250px;
+                max-height: 250px;
+                float: right;
+                box-sizing: border-box;
+                padding: 20px;
+                margin: 20px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                margin-top: 0px;
+            }
+        }
+        &.Gallery {
+            section.GallerySet + hr, p + hr {
+                margin-top: 40px;
+                margin-bottom: 40px;
+            }
+        }
         &.Store {
             font-family: 'IBM Plex Serif', serif;
 
@@ -577,6 +605,17 @@ div.swal2-popup.swal2-modal {
     #root {
         max-width: 100%;
         overflow-x: hidden;
+
+        div.About {
+            img {
+                display: block;
+                width: 100%;
+                float: initial;
+                max-width: initial;
+                max-height: initial;
+                margin: 20px 0px;
+            }
+        }
 
         div.Store {
             div.content {

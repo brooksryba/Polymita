@@ -1,4 +1,4 @@
-import { Header, Footer } from 'components/Base'
+import { Header, Heading, Footer } from 'components/Base'
 import { ContactUs } from 'components/ContactUs';
 
 
@@ -7,7 +7,7 @@ function ContactPage() {
         <div className="Contact">
             <Header />
             <section>
-                <h3>Contact:</h3>
+                <Heading icon="phone" level={2}>Contact:</Heading>
                 <p>
                     Thank you for your interest in commissioning a custom piece of pottery, photography, or a digital painting from Brooks. Whether
                     you're looking for a unique gift or a one-of-a-kind addition to your home or office, Brooks is eager to collaborate with you to
@@ -18,7 +18,7 @@ function ContactPage() {
                     you'd like included. Brooks will work closely with you to ensure that the final product meets your expectations.<br/><br/>
                 </p>
                 <section className="info">
-                    <h4>Notes:</h4>
+                <Heading icon="note" level={3}>Notes:</Heading>
                     <p className="accent">
                         For custom pottery pieces, Brooks will begin by discussing the design with you and creating a sketch or prototype for your approval.
                         Once the design is finalized, he will begin the process of throwing, trimming, and glazing the piece to perfection. For photography projects,

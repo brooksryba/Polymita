@@ -1,4 +1,4 @@
-import { Header, Footer } from 'components/Base'
+import { Header, Heading, Footer } from 'components/Base'
 
 
 function HomePage() {
@@ -6,7 +6,7 @@ function HomePage() {
         <div className="Home">
             <Header />
             <section>
-                <h1>Welcome to the Studio</h1>
+                <Heading level={1}>Welcome to the Studio:</Heading>
                 <p>
                     Welcome to Brooks' Studio, where the worlds of precision and creativity converge. We are thrilled to announce the launch of our brand new website,
                     showcasing a stunning portfolio of macro photography, handmade ceramics, and photorealistic digital paintings.<br/><br/>
@@ -15,6 +15,7 @@ function HomePage() {
                     the world in a way that is often overlooked. Through our macro photography, we capture the intricate details of everyday objects, revealing a
                     world of texture, color, and complexity that is often hidden from view.<br/><br/>
                 </p>
+                <img src={require('images/Studio.png')} alt="Studio"/>
                 <p className="accent">
                     In addition to our photography, we offer handmade ceramics and photorealistic digital paintings, all crafted with the same level of precision
                     and attention to detail. We welcome you to use our contact form to inquire about commissioned work.
