@@ -15,7 +15,7 @@ function HomePage() {
                     the world in a way that is often overlooked. Through our macro photography, we capture the intricate details of everyday objects, revealing a
                     world of texture, color, and complexity that is often hidden from view.<br/><br/>
                 </p>
-                <img src={require('images/Studio.png')} alt="Studio"/>
+                <img src={require('images/Studio.webp')} alt="Studio"/>
                 <p className="accent">
                     In addition to our photography, we offer handmade ceramics and photorealistic digital paintings, all crafted with the same level of precision
                     and attention to detail. We welcome you to use our contact form to inquire about commissioned work.

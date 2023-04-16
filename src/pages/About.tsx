@@ -8,7 +8,7 @@ function AboutPage() {
             <section>
                 <h2>Biography:</h2>
                 <p>
-                    <img src={require('images/Brooks.png')} alt="Brooks"/>
+                    <img src={require('images/Brooks.webp')} alt="Brooks"/>
                     Brooks, who currently resides in south-east Michigan, was inspired to pursue art from a young age thanks to the encouragement and support
                     of his parents. Though he is a self-taught Software Engineer with a background in graphics design, his passion for fine arts has led him to
                     explore ceramics, digital paintings, and macro photography. With his ability to quickly learn and adapt to new technology, Brooks is able to
@@ -22,7 +22,7 @@ function AboutPage() {
                 <p className="accent">
                     As an artist, Brooks is driven by a passion for precision and technical design, which is evident in his diverse body of work. From macro
                     photography to handmade ceramic mugs to photorealistic digital paintings, he strives to create pieces that are not only visually striking
-                    <img src={require('images/Wheel.jpg')} alt="Wheel"/>
+                    <img src={require('images/Wheel.webp')} alt="Wheel"/>
                     but also meticulously crafted.
 
                     &nbsp;His love for technical design is reflected in his macro photography, where he explores the intricate details of the natural world. Through
@@ -39,7 +39,7 @@ function AboutPage() {
                 </p>
                 <h2>Process:</h2>
                 <p className="accentSecondary">
-                    <img src={require('images/Tools.jpg')} alt="Tools"/>
+                    <img src={require('images/Tools.webp')} alt="Tools"/>
                     As a ceramic artist working from a home studio, Brooks' process is deeply rooted in the tactile nature of working with clay. Using a
                     Skutt-818 kiln and spare bedroom turned pottery studio, he is able to fully immerse themselves in the creative process.
                     Each piece Brooks create begins on the wheel, where he carefully mold and shape the clay into the desired form. From there,
